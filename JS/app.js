@@ -112,9 +112,13 @@ $(() => {
         ghost.isInPlay = true;
         // need to set method for isInPlay to display card
         player1.mana -= ghost.cost;
-        // console.log("Ghost played!");
+        player1.cardsInPlay.push(ghost);
+        console.log("Ghost played!");
         let t = player1.hand.indexOf(ghost);
         player1.hand.splice(t, 1);
+      } else {
+        // need to change to message in DOM
+        console.log("not enough mana");
       }
     },
 
@@ -131,16 +135,31 @@ $(() => {
     // }
 
   }
-  // test code
-
+// listening
+$('.start').on('click', () => {
   game.startGame();
   game.roundBegin();
-  // console.log(game.roundNumber);
   game.turnBegin();
+});
+
+$('div', '.hand').on('click', (e) => {
+  game.playCard();
+  $(e.currentTarget).appendTo(".inPlay");
+});
+
+
+
+  // test code
+
+  // game.startGame();
+  // game.roundBegin();
+  // console.log(game.roundNumber);
+  // game.turnBegin();
   // console.log(player1.hand);
   // console.log(player1.mana);
   // console.log(ghost.isInPlay);
-  game.playCard();
+  // game.playCard();
+  // game.playCard();
   // console.log(player1.mana);
   // successfully subtracted mana from player1
   // successfully played ghost
