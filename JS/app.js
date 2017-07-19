@@ -3,7 +3,7 @@ $(() => {
   // creatures
 
   class creature {
-    constructor(name, cost, attackPoints, defensePoints, isInPlay, isDead, canAttack) {
+    constructor(name, cost, attackPoints, defensePoints) {
       this.name = "";
       this.cost = 0;
       this.attackPoints = 0;
@@ -11,30 +11,30 @@ $(() => {
       this.isInPlay = false;
       this.isDead = false;
       this.canAttack = false;
-
+      this.defender = [];
     }
   }
 
-  class ghoul extends creature {
-    constructor(name, cost, attackPoints, defensePoints, isInPlay, isDead, canAttack) {
-      super(name, cost, attackPoints, defensePoints, isInPlay, isDead, canAttack);
-      this.name = "Ghoul";
-      this.cost = 1;
-      this.attackPoints = 1;
-      this.defensePoints = 1;
-      this.isInPlay = false;
-      this.isDead = false;
-      this.canAttack = false;
-    }
-  }
+  // class ghoul extends creature {
+  //   constructor(name, cost, attackPoints, defensePoints, isInPlay, isDead, canAttack, defender) {
+  //     super(name, cost, attackPoints, defensePoints, isInPlay, isDead, canAttack, defender);
+  //     this.name = "Ghoul";
+  //     this.cost = 1;
+  //     this.attackPoints = 1;
+  //     this.defensePoints = 1;
+  //     this.isInPlay = false;
+  //     this.isDead = false;
+  //     this.canAttack = false;
+  //   }
+  // }
 
   const ghost = new ghoul;
 
   // players
 
   class player {
-    constructor(name, healthPoints, deck, hand, graveyard, mana, cardsInPlay) {
-      this.name = "";
+    constructor(name) {
+      this.name = name;
       this.healthPoints = 30;
       this.deck = [];
       this.hand = [];
@@ -72,12 +72,13 @@ $(() => {
   // }
 
 
-  const player1 = new player();
+  const player1 = new player("Mark");
   const player2 = new player();
 
   // gameplay
   const game = {
     roundNumber: 0,
+    battlefield: [],
 
     // flipCoin() {
     //
@@ -117,9 +118,17 @@ $(() => {
         let t = player1.hand.indexOf(ghost);
         player1.hand.splice(t, 1);
       } else {
-        // need to change to message in DOM
+        // need to change to message on DOM
         console.log("not enough mana");
       }
+    },
+
+    setAttack() {
+        if (creature.canAttack === true) {
+          this.battlefield.push();
+        } else {
+          console.log('can not attack');
+        }
     },
 
     attackPhase() {
@@ -143,17 +152,22 @@ $('.start').on('click', () => {
   game.roundBegin();
   game.turnBegin();
   $('.healthStats').text('Health: ' + player1.healthPoints);
-  $('#manaStats').text('Mana: ' + player1.mana);
-  console.log(player1.mana);
+  $('.manaStats').text('Mana: ' + player1.mana);
+  console.log(player1);
 });
 
-$('div', '.hand').on('click', (e) => {
+$('.hand .card').on('click', (e) => {
+  // need to change to cards in play that are clicked don't attempt to put into play again
   game.playCard();
   $(e.currentTarget).appendTo(".inPlay");
   // $('p').attr(ghost.cost);
   console.log(player1.mana);
-  $('#manaStats').text('Mana: ' + player1.mana);
+  $('.manaStats').text('Mana: ' + player1.mana);
 });
+
+// $('.hand .card').on('click', (e) => {
+//   $(e.currentTarget).appendTo(".battleField");
+
 
 
 
