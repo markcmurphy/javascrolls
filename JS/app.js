@@ -75,7 +75,6 @@ $(() => {
   const player1 = new player();
   const player2 = new player();
 
-
   // gameplay
   const game = {
     roundNumber: 0,
@@ -114,6 +113,7 @@ $(() => {
         player1.mana -= ghost.cost;
         player1.cardsInPlay.push(ghost);
         console.log("Ghost played!");
+        console.log(player1.mana);
         let t = player1.hand.indexOf(ghost);
         player1.hand.splice(t, 1);
       } else {
@@ -135,19 +135,24 @@ $(() => {
     // }
 
   }
+
+
 // listening
 $('.start').on('click', () => {
   game.startGame();
   game.roundBegin();
   game.turnBegin();
-  $('.healthStats').append(player1.healthPoints);
-  $('.manaStats').append(player1.mana);
+  $('.healthStats').text('Health: ' + player1.healthPoints);
+  $('#manaStats').text('Mana: ' + player1.mana);
+  console.log(player1.mana);
 });
 
 $('div', '.hand').on('click', (e) => {
   game.playCard();
   $(e.currentTarget).appendTo(".inPlay");
-  $('p').text(ghost.cost);
+  // $('p').attr(ghost.cost);
+  console.log(player1.mana);
+  $('#manaStats').text('Mana: ' + player1.mana);
 });
 
 
