@@ -140,11 +140,14 @@ $('.start').on('click', () => {
   game.startGame();
   game.roundBegin();
   game.turnBegin();
+  $('.healthStats').append(player1.healthPoints);
+  $('.manaStats').append(player1.mana);
 });
 
 $('div', '.hand').on('click', (e) => {
   game.playCard();
   $(e.currentTarget).appendTo(".inPlay");
+  $('p').text(ghost.cost);
 });
 
 
@@ -165,7 +168,7 @@ $('div', '.hand').on('click', (e) => {
   // successfully played ghost
   // console.log(ghost.isInPlay);
   // successfully changed play status of ghost
-  console.log(player1.hand);
+  // console.log(player1.hand);
 
 
 
