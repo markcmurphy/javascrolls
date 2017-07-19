@@ -91,11 +91,12 @@ const game = {
   //
   // }
 
-  roundBegin () {
+  roundBegin (targetPlayer) {
 for (let i=0; i<3; i++) {
   // to be changed later to pull 3 random cards from deck
-  player1.hand.push(ghost);
+  targetPlayer.hand.push(ghost);
 };
+  targetPlayer.mana += 1;
   },
 
   startGame() {
@@ -121,8 +122,9 @@ for (let i=0; i<3; i++) {
 }
 // test code
 
-game.roundBegin();
+game.roundBegin(player1);
 console.log(player1.hand);
+console.log(player1.mana);
 
 
 // ideas for how to attack player
