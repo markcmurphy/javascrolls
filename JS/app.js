@@ -26,9 +26,11 @@ $(() => {
         this.cardsInPlay = [];
       }
     }
+
     const player1 = new Player("Mark");
     const player2 = new Player("Comp");
-    const ghost = new Creature("Ghost",1,1,1);
+    const ghost = new Creature("Ghost", 1, 1, 1);
+
     // gameplay
 
   const game = {
@@ -44,14 +46,17 @@ $(() => {
     //
     // }
 
-  dealCard(targetPlayer) {
-    targetPlayer.hand.push(ghost);
+
+  dealCard(targetPlayer, card) {
+    targetPlayer.hand.push(card);
+    $('<div>').addClass('card').appendTo('.hand').text(ghost.name).append('<input type="button" class="play" value="play"/>');
+    console.log(targetPlayer.hand);
   },
 
   dealFirstHand() {
     for (let i = 0; i < 3; i++) {
-      game.dealCard(player1);
-      game.dealCard(player2);
+      game.dealCard(player1, ghost);
+      // game.dealCard(player2, ghost);
     };
   },
 
@@ -74,22 +79,22 @@ $(() => {
       this.roundNumber += 1;
     },
 
-    turnBegin() {
+    turnBegin(targetPlayer) {
       // need to configure so that +1 card isn't dealt on first turn
-      player1.mana += 1; // need to configure to ensure a max of 10 using if statements
+      targetPlayer.mana += 1; // need to configure to ensure a max of 10 using if statements
 
     },
 
-    playCard() {
+    playCard(card) {
       // set peram for target card
-      if (ghost.cost <= player1.mana) {
-        ghost.isInPlay = true;
+      if (card.cost <= player1.mana) {
+        card.isInPlay = true;
         // need to set method for isInPlay to display card
-        player1.mana -= ghost.cost;
-        player1.cardsInPlay.push(ghost);
+        player1.mana -= card.cost;
+        player1.cardsInPlay.push(card);
         console.log("Ghost played!");
         console.log(player1.mana);
-        let t = player1.hand.indexOf(ghost);
+        let t = player1.hand.indexOf(card);
         player1.hand.splice(t, 1);
       } else {
         // need to change to message on DOM
@@ -123,19 +128,22 @@ $(() => {
 // listening
 $('.start').on('click', () => {
   game.startGame();
-  // game.roundBegin();
-  game.turnBegin();
-
+  game.roundBegin(player1);
+  game.turnBegin(player1);
+  game.updateMana(player1);
+  game.updateHealth(player1);
 });
 
-$('.hand .card').on('click', (e) => {
+$('.hand').on('click', '.card', (e) => {
   // need to change to cards in play that are clicked don't attempt to put into play again
-  game.playCard();
+  console.log('clicked');
+  game.playCard(ghost);
   $(e.currentTarget).appendTo(".inPlay");
-  // $('p').attr(ghost.cost);
-  console.log(player1.mana);
-  $('.manaStats').text('Mana: ' + player1.mana);
+  // // $('p').attr(ghost.cost);
+  game.updateMana(player1);
 });
+
+
 
 // $('.hand .card').on('click', (e) => {
 //   $(e.currentTarget).appendTo(".battleField");
