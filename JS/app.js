@@ -50,16 +50,19 @@ $(() => {
 
   dealFirstHand() {
     for (let i = 0; i < 3; i++) {
-      // to be changed later to pull 3 random cards from deck
       game.dealCard(player1);
       game.dealCard(player2);
     };
   },
 
+  updateMana(targetPlayer) {
+    $('.manaStats').text('Mana: ' + targetPlayer.mana);
+  },
+
     startGame() {
       game.dealFirstHand();
       $('.healthStats').text('Health: ' + player1.healthPoints);
-      $('.manaStats').text('Mana: ' + player1.mana);
+      game.updateMana(player1);
     },
 
     roundBegin() {
