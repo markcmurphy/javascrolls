@@ -49,7 +49,7 @@ $(() => {
 
   dealCard(targetPlayer, card) {
     targetPlayer.hand.push(card);
-    $('<div>').addClass('card').appendTo('.hand').text(ghost.name).append('<input type="button" class="play" value="play"/>');
+    $('<div>').addClass('card').appendTo('.hand').text(card.name + ' cost: ' + card.cost);
     console.log(targetPlayer.hand);
   },
 
@@ -135,11 +135,8 @@ $('.start').on('click', () => {
 });
 
 $('.hand').on('click', '.card', (e) => {
-  // need to change to cards in play that are clicked don't attempt to put into play again
-  console.log('clicked');
   game.playCard(ghost);
   $(e.currentTarget).appendTo(".inPlay");
-  // // $('p').attr(ghost.cost);
   game.updateMana(player1);
 });
 
