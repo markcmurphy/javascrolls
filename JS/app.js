@@ -1,84 +1,40 @@
 $(() => {
 
-  // creatures
+  // classes
 
-  class creature {
+  class Creature {
     constructor(name, cost, attackPoints, defensePoints) {
-      this.name = "";
-      this.cost = 0;
-      this.attackPoints = 0;
-      this.defensePoints = 0;
-      this.isInPlay = false;
-      this.isDead = false;
-      this.canAttack = false;
-      this.defender = [];
+        this.name = name;
+        this.cost = cost;
+        this.attackPoints = attackPoints;
+        this.defensePoints = defensePoints;
+        this.isInPlay = false;
+        this.isDead = false;
+        this.canAttack = false;
+        this.defender = [];
+      }
     }
-  }
 
-  // class ghoul extends creature {
-  //   constructor(name, cost, attackPoints, defensePoints, isInPlay, isDead, canAttack, defender) {
-  //     super(name, cost, attackPoints, defensePoints, isInPlay, isDead, canAttack, defender);
-  //     this.name = "Ghoul";
-  //     this.cost = 1;
-  //     this.attackPoints = 1;
-  //     this.defensePoints = 1;
-  //     this.isInPlay = false;
-  //     this.isDead = false;
-  //     this.canAttack = false;
-  //   }
-  // }
-
-  const ghost = new ghoul;
-
-  // players
-
-  class player {
-    constructor(name) {
-      this.name = name;
-      this.healthPoints = 30;
-      this.deck = [];
-      this.hand = [];
-      this.graveyard = [];
-      this.mana = 0;
-      this.cardsInPlay = [];
+    class Player {
+      constructor(name) {
+        this.name = name;
+        this.healthPoints = 30;
+        this.deck = [];
+        this.hand = [];
+        this.graveyard = [];
+        this.mana = 0;
+        this.cardsInPlay = [];
+      }
     }
-  }
+    const player1 = new Player("Mark");
+    const player2 = new Player("Comp");
+    const ghost = new Creature("Ghost",1,1,1);
+    // gameplay
 
-  // class player1 extends player {
-  //   constructor(name, healthPoints, deck, hand, graveyard, mana, cardsInPlay) {
-  //   super(name, healthPoints, deck, hand, graveyard, mana, cardsInPlay);
-  //   this.name = "Player One";
-  //   this.healthPoints = 30;
-  //   this.deck = [];
-  //   this.hand = [ghost];
-  //   this.graveyard = [];
-  //   this.mana = 0;
-  //   this.cardsInPlay = [];
-  //   }
-  // }
-
-  // class player2 extends player {
-  //   constructor(name, healthPoints, deck, hand, graveyard, mana, cardsInPlay) {
-  //   super(name, healthPoints, deck, hand, graveyard, mana, cardsInPlay);
-  //   this.name = "Player Two";
-  //   this.healthPoints = 30;
-  //   this.deck = [];
-  //   this.hand = [];
-  //   this.graveyard = [];
-  //   this.mana = 0;
-  //   this.cardsInPlay = [];
-  // }
-  //
-  // }
-
-
-  const player1 = new player("Mark");
-  const player2 = new player();
-
-  // gameplay
   const game = {
     roundNumber: 0,
     battlefield: [],
+    // currentCreatures: [ghost],
 
     // flipCoin() {
     //
@@ -88,12 +44,22 @@ $(() => {
     //
     // }
 
+  dealCard(targetPlayer) {
+    targetPlayer.hand.push(ghost);
+  },
+
+  dealFirstHand() {
+    for (let i = 0; i < 3; i++) {
+      // to be changed later to pull 3 random cards from deck
+      game.dealCard(player1);
+      game.dealCard(player2);
+    };
+  },
+
     startGame() {
-      for (let i = 0; i < 3; i++) {
-        // to be changed later to pull 3 random cards from deck
-      player1.hand.push(ghost);
-      player2.hand.push(ghost);
-      };
+      game.dealFirstHand();
+      $('.healthStats').text('Health: ' + player1.healthPoints);
+      $('.manaStats').text('Mana: ' + player1.mana);
     },
 
     roundBegin() {
@@ -103,7 +69,7 @@ $(() => {
     turnBegin() {
       // need to configure so that +1 card isn't dealt on first turn
       player1.mana += 1; // need to configure to ensure a max of 10 using if statements
-      player1.hand.push(ghost);
+
     },
 
     playCard() {
@@ -149,11 +115,9 @@ $(() => {
 // listening
 $('.start').on('click', () => {
   game.startGame();
-  game.roundBegin();
+  // game.roundBegin();
   game.turnBegin();
-  $('.healthStats').text('Health: ' + player1.healthPoints);
-  $('.manaStats').text('Mana: ' + player1.mana);
-  console.log(player1);
+
 });
 
 $('.hand .card').on('click', (e) => {
@@ -198,4 +162,5 @@ $('.hand .card').on('click', (e) => {
   // console.log(player1.healthPoints);
 
   // end of run on window load
+// game.instancesOfGhost();
 });
