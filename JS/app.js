@@ -59,9 +59,14 @@ $(() => {
     $('.manaStats').text('Mana: ' + targetPlayer.mana);
   },
 
+  updateHealth(targetPlayer) {
+   $('.healthStats').text('Health: ' + targetPlayer.healthPoints);
+  },
+
+
     startGame() {
       game.dealFirstHand();
-      $('.healthStats').text('Health: ' + player1.healthPoints);
+      game.updateHealth(player1);
       game.updateMana(player1);
     },
 
