@@ -44,8 +44,8 @@ class player {
   }
 }
 // this can be moved to new game function later
-const player1 = new player;
-const player2 = new player;
+const player1 = new player();
+const player2 = new player();
 
 
 // class player1 extends player {
@@ -92,7 +92,10 @@ const game = {
   // }
 
   roundBegin () {
-
+for (let i=0; i<3; i++) {
+  // to be changed later to pull 3 random cards from deck
+  player1.hand.push(ghost);
+};
   },
 
   startGame() {
@@ -118,15 +121,15 @@ const game = {
 }
 // test code
 
-player1.hand.push(ghost);
-player2.hand.push(ghost);
+game.roundBegin();
 console.log(player1.hand);
-console.log(player2.hand);
 
-const hitPlayer = (target) => {target.healthPoints -= 1;
-};
-hitPlayer(player1);
-console.log(player1.healthPoints);
+
+// ideas for how to attack player
+// const hitPlayer = (target) => {target.healthPoints -= 1;
+// };
+// hitPlayer(player1);
+// console.log(player1.healthPoints);
 
 // end of run on window load
 });
