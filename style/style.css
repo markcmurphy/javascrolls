@@ -1,5 +1,6 @@
 body {
-  background: #312E7B;
+  background: white;
+  font-family: roboto;
 }
 
 .board {
@@ -26,6 +27,10 @@ body {
   border: 3px solid lavender;
 }
 
+.attackButton {
+
+}
+
 .playerArea2 {
   display: flex;
   flex-direction: column;
@@ -41,13 +46,13 @@ body {
 .card {
   flex-direction: row;
   flex-wrap: wrap;
-  height: 75px;
-  width: 55px;
+  height: 95px;
+  width: 95px;
   border: 1px solid #108BCD;
   background: #4EBDF8;
   margin: auto;
   /*display: inline-block;*/
-  font-size: 20px;
+  font-size: 10px;
   text-align: center;
   vertical-align: middle;
   /*overflow: hidden;*/
@@ -58,6 +63,10 @@ body {
 }
 
 .graveyard {
+
+}
+
+.nameButton {
 
 }
 
@@ -103,6 +112,8 @@ body {
   border: 3px solid rgb(255, 142, 7);
   text-align: center;
 }
+
+
 
 .deck {
 

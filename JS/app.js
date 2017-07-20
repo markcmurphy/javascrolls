@@ -48,10 +48,13 @@ $(() => {
     //
     // }
 
+  buildCard(card) {
+    $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>','</br><button class="defend">B</button>');
+  },
 
   dealCard(targetPlayer, card) {
     targetPlayer.hand.push(card);
-    $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost);
+    this.buildCard(card);
   },
 
   dealFirstHand(targetPlayer) {
@@ -104,7 +107,7 @@ $(() => {
         if (target.canAttack === true) {
           this.attackers.push(target);
         } else {
-          console.log('can not attack');
+          // console.log('can not attack');
         }
     },
 
@@ -157,13 +160,22 @@ $('.hand').on('click', '.card', (e) => {
 } else {alert('not enough mana');}
 });
 
-$('.inPlay').on('click', '.card', (e) => {
-  if (ghost.canAttack === true) {
-$(e.currentTarget).appendTo(".battleField");
+$('.inPlay').on('click', '.attack', (e) => {
+  if (ghost.canAttack == true) {
+$(e.currentTarget).closest('.card').appendTo(".battleField");
 game.setAttack(this);
 } else {alert('can not attack')};
 });
 
+
+$('.battleField .card').click(
+    function() {
+        alert("Select attacker to defend");
+    },
+    function() {
+      alert('defender matched with attacker ')
+    }
+);
 
 
   // test code
