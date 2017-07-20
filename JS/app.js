@@ -99,8 +99,10 @@ $(() => {
     },
 
 
-    startGame() {
+    startGame(targetPlayer) {
       console.log('Game started!');
+      this.currentPlayersTurn = targetPlayer;
+      targetPlayer.mana += 1;
       game.dealFirstHand(player1);
       game.dealFirstHand(player2);
       game.updateHealth(player1);
@@ -117,8 +119,12 @@ $(() => {
     turnBegin(targetPlayer) {
       this.currentPlayersTurn = targetPlayer;
       targetPlayer.mana += 1;
+      let a = Math.floor((Math.random() * game.availableCreatures.length));
+      let card = game.availableCreatures[a];
+      game.dealCard(targetPlayer, card);
       game.updateMana(targetPlayer);
       game.updateMana(targetPlayer);
+      console.log(targetPlayer);
 
       // need to configure to ensure a max of 10 using if statements
 
@@ -142,6 +148,13 @@ $(() => {
         // need to change to message on DOM
         // console.log("not enough mana");
       // }
+    },
+
+    compTurn() {
+      let a = Math.floor((Math.random() * player2.hand.length));
+      let card = player1.hand[a];
+      playCard(player2, card);
+      $('card').appendTo(".playerArea2 .inPlay");
     },
 
     setAttack(target) {
@@ -186,11 +199,11 @@ $(() => {
 
   // listening
   $('.start').on('click', () => {
-    game.startGame();
+    game.startGame(player1);
     game.roundBegin(player1);
-    game.turnBegin(player1);
-    game.updateMana(player1);
-    game.updateHealth(player1);
+    // game.turnBegin(player1);
+    // game.updateMana(player1);
+    // game.updateHealth(player1);
   });
 
 
