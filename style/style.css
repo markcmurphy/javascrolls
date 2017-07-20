@@ -14,7 +14,19 @@ body {
   /*margin-top: 25px*/
 }
 
-.playerArea {
+.playerArea1 {
+  display: flex;
+  flex-direction: column;
+  height:400px;
+  min-width: 450px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: lavender;
+  border: 3px solid lavender;
+}
+
+.playerArea2 {
   display: flex;
   flex-direction: column;
   height:400px;
@@ -46,7 +58,16 @@ body {
 }
 
 .battleField {
-
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  background: #FFD29C;
+  height: 100px;
+  width: auto;
+  margin: 10px;
+  padding: 5px;
+  border: 3px solid rgb(255, 142, 7);
+  text-align: center;
 }
 
 .play {
