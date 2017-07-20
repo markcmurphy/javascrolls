@@ -158,8 +158,10 @@ $('.hand').on('click', '.card', (e) => {
 });
 
 $('.inPlay').on('click', '.card', (e) => {
+  if (ghost.canAttack === true) {
 $(e.currentTarget).appendTo(".battleField");
 game.setAttack(this);
+} else {alert('can not attack')};
 });
 
 
