@@ -11,7 +11,7 @@ $(() => {
         this.isInPlay = false;
         this.isDead = false;
         this.canAttack = true;
-        this.defender = [];
+        this.canDefend = true;
       }
     }
 
@@ -30,12 +30,14 @@ $(() => {
     const player1 = new Player("Mark");
     const player2 = new Player("Comp");
     const ghost = new Creature("Ghost", 1, 1, 1);
+    const archer = new Creature("Archer", 1, 1, 2);
 
     // gameplay
 
   const game = {
     roundNumber: 0,
-    battlefield: [],
+    attackers: [],
+    defenders: [],
     // currentCreatures: [ghost],
 
     // flipCoin() {
@@ -102,17 +104,33 @@ $(() => {
       }
     },
 
-    setAttack() {
-        if (ghost.canAttack === true) {
-          this.battlefield.push();
-          console.log(this.battlefield);
+    setAttack(target) {
+        if (target.canAttack === true) {
+          this.attackers.push(target);
         } else {
           console.log('can not attack');
         }
     },
 
-    attackPhase() {
+    setDefenders(target) {
+        if (target.canDefend === true) {
+          this.defenders.push(target);
+        } else {
+          console.log('can not defend');
+        }
+    },
 
+    attackPhase() {
+      let a = this.defenders[0].defensePoints - this.attackers[0].attackPoints;
+      let b = this.attackers[0].defensePoints - this.defenders[0].attackPoints;
+      if (a <= 0) {
+        this.defenders[0].isDead = true;
+      };
+      if (b <= 0) {
+        this.attackers[0].isDead = true;
+      };
+      console.log(this.defenders[0].isDead);
+      console.log(this.attackers[0].isDead);
     },
 
     isWon() {
@@ -176,4 +194,8 @@ game.setAttack(this);
 
   // end of run on window load
 // game.instancesOfGhost();
+game.setAttack(ghost);
+game.setDefenders(archer);
+
+game.attackPhase();
 });
