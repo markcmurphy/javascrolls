@@ -10,7 +10,7 @@ $(() => {
         this.defensePoints = defensePoints;
         this.isInPlay = false;
         this.isDead = false;
-        this.canAttack = false;
+        this.canAttack = true;
         this.defender = [];
       }
     }
@@ -103,8 +103,9 @@ $(() => {
     },
 
     setAttack() {
-        if (creature.canAttack === true) {
+        if (ghost.canAttack === true) {
           this.battlefield.push();
+          console.log(this.battlefield);
         } else {
           console.log('can not attack');
         }
@@ -140,11 +141,10 @@ $('.hand').on('click', '.card', (e) => {
   game.updateMana(player1);
 });
 
-
-
-// $('.hand .card').on('click', (e) => {
-//   $(e.currentTarget).appendTo(".battleField");
-
+$('.inPlay').on('click', '.card', (e) => {
+$(e.currentTarget).appendTo(".battleField");
+game.setAttack(this);
+});
 
 
 

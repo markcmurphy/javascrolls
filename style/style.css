@@ -3,27 +3,42 @@ body {
 }
 
 .board {
+  display: flex;
+  flex-direction: column;
   height: 900px;
   width: auto;
   background-color: #FFAB46;
   border: 3px solid rgb(255, 142, 7);
-  margin-left: 45px;
-  margin-right: 45px;
-  margin-top: 25px
+  /*margin-left: 45px;*/
+  /*margin-right: 45px;*/
+  /*margin-top: 25px*/
+}
+
+.playerArea {
+  display: flex;
+  flex-direction: column;
+  height:400px;
+  min-width: 450px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: lavender;
+  border: 3px solid lavender;
 }
 
 .card {
-  height: 150px;
-  width: 150px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 75px;
+  width: 55px;
   border: 1px solid #108BCD;
   background: #4EBDF8;
-  margin: 20px;
-  display: inline-block;
-  font-size: 30px;
+  margin: auto;
+  /*display: inline-block;*/
+  font-size: 20px;
   text-align: center;
-  /*line-height: 250px;*/
   vertical-align: middle;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .graveyard {
@@ -34,18 +49,34 @@ body {
 
 }
 
+.play {
+
+}
+
 .hand {
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
   background: #FFD29C;
-  height: 300px;
-  width: 600px;
+  height: 100px;
+  width: auto;
+  margin: 10px;
+  padding: 5px;
   border: 3px solid rgb(255, 142, 7);
+  text-align: center;
 }
 
 .inPlay{
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
   background: #FFD29C;
-  height: 300px;
-  width: 600px;
+  height: 100px;
+  width: auto;
+  margin: 10px;
+  padding: 5px;
   border: 3px solid rgb(255, 142, 7);
+  text-align: center;
 }
 
 .deck {
