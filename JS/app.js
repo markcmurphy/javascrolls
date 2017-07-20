@@ -49,13 +49,17 @@ $(() => {
     //
     // }
 
-  buildCard(card) {
-    $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>','</br><button class="defend">B</button>');
-  },
+  buildCard(targetPlayer, card) {
+    if (targetPlayer === player1) {
+    $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>','</br><button class="defend">B</button>')
+  } else if (targetPlayer === player2) {
+  $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>','</br><button class="defend">B</button>');
+}
+},
 
   dealCard(targetPlayer, card) {
     targetPlayer.hand.push(card);
-    this.buildCard(card);
+    this.buildCard(targetPlayer, card);
   },
 
   dealFirstHand(targetPlayer) {
@@ -84,6 +88,7 @@ $(() => {
     startGame() {
       console.log('Game started!');
       game.dealFirstHand(player1);
+      game.dealFirstHand(player2);
       game.updateHealth(player1);
       game.updateHealth(player2);
       game.updateMana(player1);
