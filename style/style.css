@@ -53,6 +53,10 @@ body {
   /*overflow: hidden;*/
 }
 
+.playerArea2 .card{
+  background: lightgreen;
+}
+
 .graveyard {
 
 }
