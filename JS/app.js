@@ -39,8 +39,9 @@ $(() => {
     roundNumber: 0,
     attackers: [],
     defenders: [],
-    availableCreatures: [ghost, archer, ghost, archer, ghost, ghost, ghost],
+    availableCreatures: [ghost, archer],
     currentPlayersTurn: {},
+    creaturesBuilt: 0,
 
     // flipCoin() {
     //
@@ -51,10 +52,13 @@ $(() => {
     // }
 
     buildCard(targetPlayer, card) {
+      game.creaturesBuilt += 1;
+      console.log(this.creaturesBuilt);
+      // console.log(card);
       if (targetPlayer === player1) {
-        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>')
+        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', game.creaturesBuilt);
       } else if (targetPlayer === player2) {
-        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>');
+        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', game.creaturesBuilt);
       }
     },
 
@@ -180,8 +184,8 @@ $(() => {
   });
 
   $('.hand').on('click', '.card', (e) => {
-    if (card.cost <= targetPlayer.mana) {
-      game.playCard(ghost);
+    if (game.card.cost <= targetPlayer.mana) {
+      game.playCard(game.card.name);
       $(e.currentTarget).appendTo(".playerArea1 .inPlay");
       game.updateMana(player1);
     } else {
