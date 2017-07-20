@@ -12,6 +12,7 @@ $(() => {
         this.isDead = false;
         this.canAttack = true;
         this.canDefend = true;
+        this.roundsInPlay = 0;
       }
     }
 
@@ -96,6 +97,9 @@ $(() => {
 
     turnBegin(targetPlayer) {
       targetPlayer.mana += 1;
+      game.updateMana(targetPlayer);
+      game.updateMana(targetPlayer);
+
       // need to configure to ensure a max of 10 using if statements
 
     },
@@ -175,6 +179,7 @@ $('.hand').on('click', '.card', (e) => {
 });
 
 $('.inPlay').on('click', '.attack', (e) => {
+  // when clicking A again, needs to return card to In Play
   if (ghost.canAttack == true) {
 $(e.currentTarget).closest('.card').appendTo(".battleField");
 game.setAttack(this);
@@ -199,6 +204,7 @@ $('.battleField .card').click(
 );
 
 $('.player1TurnOver').on('click', () => {
+  console.log("player 1 turn over");
   game.turnBegin(player2);
 });
 
