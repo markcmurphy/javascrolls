@@ -51,7 +51,7 @@ $(() => {
 
   dealCard(targetPlayer, card) {
     targetPlayer.hand.push(card);
-    $('<div>').addClass('card').appendTo('.hand').text(card.name + ' cost: ' + card.cost);
+    $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost);
   },
 
   dealFirstHand(targetPlayer) {
@@ -152,7 +152,7 @@ $('.start').on('click', () => {
 $('.hand').on('click', '.card', (e) => {
   if (ghost.cost <= player1.mana) {
     game.playCard(ghost);
-  $(e.currentTarget).appendTo(".inPlay");
+  $(e.currentTarget).appendTo(".playerArea1 .inPlay");
   game.updateMana(player1);
 } else {alert('not enough mana');}
 });
