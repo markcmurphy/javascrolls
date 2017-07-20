@@ -38,7 +38,7 @@ $(() => {
     roundNumber: 0,
     attackers: [],
     defenders: [],
-    availableCreatures: [ghost, archer, ghost],
+    availableCreatures: [ghost, archer, ghost, archer, ghost, ghost, ghost],
 
     // flipCoin() {
     //
@@ -59,31 +59,44 @@ $(() => {
 
   dealFirstHand(targetPlayer) {
     for (let i = 0; i < 3; i++) {
+      // this needs to be random from either deck or availableCreatures
       game.dealCard(targetPlayer, game.availableCreatures[i]);
     };
   },
 
   updateMana(targetPlayer) {
-    $('.manaStats').text('Mana: ' + targetPlayer.mana);
-  },
+    if (targetPlayer === player1) {
+    $('.manaStats1').text('Mana: ' + targetPlayer.mana);
+  } else if (targetPlayer === player2) {    $('.manaStats2').text('Mana: ' + targetPlayer.mana);
+  }
+},
 
   updateHealth(targetPlayer) {
-   $('.healthStats').text('Health: ' + targetPlayer.healthPoints);
-  },
+    if (targetPlayer === player1) {
+   $('.healthStats1').text('Health: ' + targetPlayer.healthPoints);
+ } else if (targetPlayer === player2) {
+   $('.healthStats2').text('Health: ' + targetPlayer.healthPoints);
+ }
+},
 
 
     startGame() {
+      console.log('Game started!');
       game.dealFirstHand(player1);
       game.updateHealth(player1);
+      game.updateHealth(player2);
       game.updateMana(player1);
+      game.updateMana(player2);
     },
 
     roundBegin() {
       this.roundNumber += 1;
+      console.log("this is round# " + this.roundNumber);
     },
 
     turnBegin(targetPlayer) {
-      targetPlayer.mana += 1; // need to configure to ensure a max of 10 using if statements
+      targetPlayer.mana += 1;
+      // need to configure to ensure a max of 10 using if statements
 
     },
 
@@ -93,10 +106,11 @@ $(() => {
         // need to set method for isInPlay to display card
         player1.mana -= card.cost;
         player1.cardsInPlay.push(card);
-        console.log("Ghost played!");
-        console.log(player1.mana);
+        console.log(card.name + " played!");
+        console.log("remaining mana:  " + player1.mana);
         let t = player1.hand.indexOf(card);
         player1.hand.splice(t, 1);
+        console.log("You now have " + player1.hand + " remaining in your hand");
       } else {
         // need to change to message on DOM
         console.log("not enough mana");
@@ -167,6 +181,13 @@ game.setAttack(this);
 } else {alert('can not attack')};
 });
 
+$('.inPlay').on('click', '.defend', (e) => {
+  if (ghost.canDefend == true) {
+$(e.currentTarget).closest('.card').appendTo(".battleField");
+game.setAttack(this);
+} else {alert('can not attack')};
+});
+
 
 $('.battleField .card').click(
     function() {
@@ -176,6 +197,10 @@ $('.battleField .card').click(
       alert('defender matched with attacker ')
     }
 );
+
+$('.player1TurnOver').on('click', () => {
+  game.turnBegin(player2);
+});
 
 
   // test code
