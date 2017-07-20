@@ -63,10 +63,11 @@ $(() => {
       this.buildCard(targetPlayer, card);
     },
 
+
+
     dealFirstHand(targetPlayer) {
       for (let i = 0; i < 3; i++) {
-        // this needs to be random from either deck or availableCreatures
-        game.dealCard(targetPlayer, game.availableCreatures[i]);
+        game.dealCard(targetPlayer, game.availableCreatures[Math.floor((Math.random() * game.availableCreatures.length))]);
       };
     },
 
@@ -88,7 +89,6 @@ $(() => {
 
 
     startGame() {
-      game.player1.reset();
       console.log('Game started!');
       game.dealFirstHand(player1);
       game.dealFirstHand(player2);
@@ -104,6 +104,7 @@ $(() => {
     },
 
     turnBegin(targetPlayer) {
+      this.currentPlayersTurn = targetPlayer;
       targetPlayer.mana += 1;
       game.updateMana(targetPlayer);
       game.updateMana(targetPlayer);
@@ -112,17 +113,17 @@ $(() => {
 
     },
 
-    playCard(card) {
-      if (card.cost <= player1.mana) {
+    playCard(targetPlayer, card) {
+      if (card.cost <= targetPlayer.mana) {
         card.isInPlay = true;
         // need to set method for isInPlay to display card
-        player1.mana -= card.cost;
-        player1.cardsInPlay.push(card);
+        targetPlayer.mana -= card.cost;
+        targetPlayer.cardsInPlay.push(card);
         console.log(card.name + " played!");
-        console.log("remaining mana:  " + player1.mana);
-        let t = player1.hand.indexOf(card);
+        console.log("remaining mana:  " + targetPlayer.mana);
+        let t = targetPlayer.hand.indexOf(card);
         player1.hand.splice(t, 1);
-        console.log("You now have " + player1.hand + " remaining in your hand");
+        console.log("You now have " + targetPlayer.hand + " remaining in your hand");
       } else {
         // need to change to message on DOM
         console.log("not enough mana");
@@ -179,7 +180,7 @@ $(() => {
   });
 
   $('.hand').on('click', '.card', (e) => {
-    if (ghost.cost <= player1.mana) {
+    if (card.cost <= targetPlayer.mana) {
       game.playCard(ghost);
       $(e.currentTarget).appendTo(".playerArea1 .inPlay");
       game.updateMana(player1);
@@ -222,6 +223,8 @@ $(() => {
     game.turnBegin(player2);
   });
 
+
+// functionality doesn't work yet
   $('.reset').on('click', () => {
     console.log("reset");
     game.startGame();
@@ -229,7 +232,6 @@ $(() => {
 
 
   // test code
-
 
 
 
