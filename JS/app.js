@@ -4,42 +4,43 @@ $(() => {
 
   class Creature {
     constructor(name, cost, attackPoints, defensePoints) {
-        this.name = name;
-        this.cost = cost;
-        this.attackPoints = attackPoints;
-        this.defensePoints = defensePoints;
-        this.isInPlay = false;
-        this.isDead = false;
-        this.canAttack = true;
-        this.canDefend = true;
-        this.roundsInPlay = 0;
-      }
+      this.name = name;
+      this.cost = cost;
+      this.attackPoints = attackPoints;
+      this.defensePoints = defensePoints;
+      this.isInPlay = false;
+      this.isDead = false;
+      this.canAttack = true;
+      this.canDefend = true;
+      this.roundsInPlay = 0;
     }
+  }
 
-    class Player {
-      constructor(name) {
-        this.name = name;
-        this.healthPoints = 30;
-        this.deck = [];
-        this.hand = [];
-        this.graveyard = [];
-        this.mana = 0;
-        this.cardsInPlay = [];
-      }
+  class Player {
+    constructor(name) {
+      this.name = name;
+      this.healthPoints = 30;
+      this.deck = [];
+      this.hand = [];
+      this.graveyard = [];
+      this.mana = 0;
+      this.cardsInPlay = [];
     }
+  }
 
-    const player1 = new Player("Mark");
-    const player2 = new Player("Comp");
-    const ghost = new Creature("Ghost", 1, 1, 1);
-    const archer = new Creature("Archer", 1, 1, 2);
+  const player1 = new Player("Mark");
+  const player2 = new Player("Comp");
+  const ghost = new Creature("Ghost", 1, 1, 1);
+  const archer = new Creature("Archer", 1, 1, 2);
 
-    // gameplay
+  // gameplay
 
   const game = {
     roundNumber: 0,
     attackers: [],
     defenders: [],
     availableCreatures: [ghost, archer, ghost, archer, ghost, ghost, ghost],
+    currentPlayersTurn: {},
 
     // flipCoin() {
     //
@@ -49,43 +50,45 @@ $(() => {
     //
     // }
 
-  buildCard(targetPlayer, card) {
-    if (targetPlayer === player1) {
-    $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>','</br><button class="defend">B</button>')
-  } else if (targetPlayer === player2) {
-  $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>','</br><button class="defend">B</button>');
-}
-},
+    buildCard(targetPlayer, card) {
+      if (targetPlayer === player1) {
+        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>')
+      } else if (targetPlayer === player2) {
+        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>');
+      }
+    },
 
-  dealCard(targetPlayer, card) {
-    targetPlayer.hand.push(card);
-    this.buildCard(targetPlayer, card);
-  },
+    dealCard(targetPlayer, card) {
+      targetPlayer.hand.push(card);
+      this.buildCard(targetPlayer, card);
+    },
 
-  dealFirstHand(targetPlayer) {
-    for (let i = 0; i < 3; i++) {
-      // this needs to be random from either deck or availableCreatures
-      game.dealCard(targetPlayer, game.availableCreatures[i]);
-    };
-  },
+    dealFirstHand(targetPlayer) {
+      for (let i = 0; i < 3; i++) {
+        // this needs to be random from either deck or availableCreatures
+        game.dealCard(targetPlayer, game.availableCreatures[i]);
+      };
+    },
 
-  updateMana(targetPlayer) {
-    if (targetPlayer === player1) {
-    $('.manaStats1').text('Mana: ' + targetPlayer.mana);
-  } else if (targetPlayer === player2) {    $('.manaStats2').text('Mana: ' + targetPlayer.mana);
-  }
-},
+    updateMana(targetPlayer) {
+      if (targetPlayer === player1) {
+        $('.manaStats1').text('Mana: ' + targetPlayer.mana);
+      } else if (targetPlayer === player2) {
+        $('.manaStats2').text('Mana: ' + targetPlayer.mana);
+      }
+    },
 
-  updateHealth(targetPlayer) {
-    if (targetPlayer === player1) {
-   $('.healthStats1').text('Health: ' + targetPlayer.healthPoints);
- } else if (targetPlayer === player2) {
-   $('.healthStats2').text('Health: ' + targetPlayer.healthPoints);
- }
-},
+    updateHealth(targetPlayer) {
+      if (targetPlayer === player1) {
+        $('.healthStats1').text('Health: ' + targetPlayer.healthPoints);
+      } else if (targetPlayer === player2) {
+        $('.healthStats2').text('Health: ' + targetPlayer.healthPoints);
+      }
+    },
 
 
     startGame() {
+      game.player1.reset();
       console.log('Game started!');
       game.dealFirstHand(player1);
       game.dealFirstHand(player2);
@@ -127,19 +130,19 @@ $(() => {
     },
 
     setAttack(target) {
-        if (target.canAttack === true) {
-          this.attackers.push(target);
-        } else {
-          // console.log('can not attack');
-        }
+      if (target.canAttack === true) {
+        this.attackers.push(target);
+      } else {
+        // console.log('can not attack');
+      }
     },
 
     setDefenders(target) {
-        if (target.canDefend === true) {
-          this.defenders.push(target);
-        } else {
-          console.log('can not defend');
-        }
+      if (target.canDefend === true) {
+        this.defenders.push(target);
+      } else {
+        console.log('can not defend');
+      }
     },
 
     attackPhase() {
@@ -166,52 +169,63 @@ $(() => {
   }
 
 
-// listening
-$('.start').on('click', () => {
-  game.startGame();
-  game.roundBegin(player1);
-  game.turnBegin(player1);
-  game.updateMana(player1);
-  game.updateHealth(player1);
-});
+  // listening
+  $('.start').on('click', () => {
+    game.startGame();
+    game.roundBegin(player1);
+    game.turnBegin(player1);
+    game.updateMana(player1);
+    game.updateHealth(player1);
+  });
 
-$('.hand').on('click', '.card', (e) => {
-  if (ghost.cost <= player1.mana) {
-    game.playCard(ghost);
-  $(e.currentTarget).appendTo(".playerArea1 .inPlay");
-  game.updateMana(player1);
-} else {alert('not enough mana');}
-});
+  $('.hand').on('click', '.card', (e) => {
+    if (ghost.cost <= player1.mana) {
+      game.playCard(ghost);
+      $(e.currentTarget).appendTo(".playerArea1 .inPlay");
+      game.updateMana(player1);
+    } else {
+      alert('not enough mana');
+    }
+  });
 
-$('.inPlay').on('click', '.attack', (e) => {
-  // when clicking A again, needs to return card to In Play
-  if (ghost.canAttack == true) {
-$(e.currentTarget).closest('.card').appendTo(".battleField");
-game.setAttack(this);
-} else {alert('can not attack')};
-});
+  $('.inPlay').on('click', '.attack', (e) => {
+    // when clicking A again, needs to return card to In Play
+    if (ghost.canAttack == true) {
+      $(e.currentTarget).closest('.card').appendTo(".battleField");
+      game.setAttack(this);
+    } else {
+      alert('can not attack')
+    };
+  });
 
-$('.inPlay').on('click', '.defend', (e) => {
-  if (ghost.canDefend == true) {
-$(e.currentTarget).closest('.card').appendTo(".battleField");
-game.setAttack(this);
-} else {alert('can not attack')};
-});
+  $('.inPlay').on('click', '.defend', (e) => {
+    if (ghost.canDefend == true) {
+      $(e.currentTarget).closest('.card').appendTo(".battleField");
+      game.setAttack(this);
+    } else {
+      alert('can not attack')
+    };
+  });
 
 
-$('.battleField .card').click(
+  $('.battleField .card').click(
     function() {
-        alert("Select attacker to defend");
+      alert("Select attacker to defend");
     },
     function() {
       alert('defender matched with attacker ')
     }
-);
+  );
 
-$('.player1TurnOver').on('click', () => {
-  console.log("player 1 turn over");
-  game.turnBegin(player2);
-});
+  $('.player1TurnOver').on('click', () => {
+    console.log("player 1 turn over");
+    game.turnBegin(player2);
+  });
+
+  $('.reset').on('click', () => {
+    console.log("reset");
+    game.startGame();
+  });
 
 
   // test code
