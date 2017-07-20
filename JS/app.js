@@ -38,7 +38,7 @@ $(() => {
     roundNumber: 0,
     attackers: [],
     defenders: [],
-    // currentCreatures: [ghost],
+    availableCreatures: [ghost, archer, ghost],
 
     // flipCoin() {
     //
@@ -52,13 +52,11 @@ $(() => {
   dealCard(targetPlayer, card) {
     targetPlayer.hand.push(card);
     $('<div>').addClass('card').appendTo('.hand').text(card.name + ' cost: ' + card.cost);
-    console.log(targetPlayer.hand);
   },
 
-  dealFirstHand() {
+  dealFirstHand(targetPlayer) {
     for (let i = 0; i < 3; i++) {
-      game.dealCard(player1, ghost);
-      // game.dealCard(player2, ghost);
+      game.dealCard(targetPlayer, game.availableCreatures[i]);
     };
   },
 
@@ -72,7 +70,7 @@ $(() => {
 
 
     startGame() {
-      game.dealFirstHand();
+      game.dealFirstHand(player1);
       game.updateHealth(player1);
       game.updateMana(player1);
     },
@@ -82,13 +80,11 @@ $(() => {
     },
 
     turnBegin(targetPlayer) {
-      // need to configure so that +1 card isn't dealt on first turn
       targetPlayer.mana += 1; // need to configure to ensure a max of 10 using if statements
 
     },
 
     playCard(card) {
-      // set peram for target card
       if (card.cost <= player1.mana) {
         card.isInPlay = true;
         // need to set method for isInPlay to display card
@@ -154,9 +150,11 @@ $('.start').on('click', () => {
 });
 
 $('.hand').on('click', '.card', (e) => {
-  game.playCard(ghost);
+  if (ghost.cost <= player1.mana) {
+    game.playCard(ghost);
   $(e.currentTarget).appendTo(".inPlay");
   game.updateMana(player1);
+} else {alert('not enough mana');}
 });
 
 $('.inPlay').on('click', '.card', (e) => {
@@ -168,34 +166,7 @@ game.setAttack(this);
 
   // test code
 
-  // game.startGame();
-  // game.roundBegin();
-  // console.log(game.roundNumber);
-  // game.turnBegin();
-  // console.log(player1.hand);
-  // console.log(player1.mana);
-  // console.log(ghost.isInPlay);
-  // game.playCard();
-  // game.playCard();
-  // console.log(player1.mana);
-  // successfully subtracted mana from player1
-  // successfully played ghost
-  // console.log(ghost.isInPlay);
-  // successfully changed play status of ghost
-  // console.log(player1.hand);
 
 
 
-  // ideas for how to attack player
-  // const hitPlayer = (target) => {target.healthPoints -= 1;
-  // };
-  // hitPlayer(player1);
-  // console.log(player1.healthPoints);
-
-  // end of run on window load
-// game.instancesOfGhost();
-game.setAttack(ghost);
-game.setDefenders(archer);
-
-game.attackPhase();
 });
