@@ -3,11 +3,12 @@ $(() => {
   // classes
 
   class Creature {
-    constructor(name, cost, attackPoints, defensePoints) {
+    constructor(name, cost, attackPoints, defensePoints, arrPlace) {
       this.name = name;
       this.cost = cost;
       this.attackPoints = attackPoints;
       this.defensePoints = defensePoints;
+      this.arrPlace = arrPlace;
       this.isInPlay = false;
       this.isDead = false;
       this.canAttack = true;
@@ -30,8 +31,8 @@ $(() => {
 
   const player1 = new Player("Mark");
   const player2 = new Player("Comp");
-  const ghost = new Creature("Ghost", 1, 1, 1);
-  const archer = new Creature("Archer", 1, 1, 2);
+  const ghost = new Creature("ghost", 1, 1, 1, 0);
+  const archer = new Creature("Archer", 1, 1, 2, 1);
 
   // gameplay
 
@@ -56,22 +57,28 @@ $(() => {
       console.log(this.creaturesBuilt);
       // console.log(card);
       if (targetPlayer === player1) {
-        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', game.creaturesBuilt);
+        $('<card>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', game.creaturesBuilt).attr(card);
       } else if (targetPlayer === player2) {
-        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', game.creaturesBuilt);
+        $('<card>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').innerHTML = card;
       }
     },
 
     dealCard(targetPlayer, card) {
       targetPlayer.hand.push(card);
       this.buildCard(targetPlayer, card);
+      game.creaturesBuilt += 1;
+      // console.log(this.creaturesBuilt);
+      // console.log(card);
+
+      console.log(targetPlayer.hand[0]);
     },
 
 
 
     dealFirstHand(targetPlayer) {
       for (let i = 0; i < 3; i++) {
-        game.dealCard(targetPlayer, game.availableCreatures[Math.floor((Math.random() * game.availableCreatures.length))]);
+        let a = Math.floor((Math.random() * game.availableCreatures.length));
+        game.dealCard(targetPlayer, game.availableCreatures[a]);
       };
     },
 
@@ -118,20 +125,23 @@ $(() => {
     },
 
     playCard(targetPlayer, card) {
-      if (card.cost <= targetPlayer.mana) {
+        // if (card.cost <= targetPlayer.mana) {
+        console.log(card);
         card.isInPlay = true;
         // need to set method for isInPlay to display card
         targetPlayer.mana -= card.cost;
         targetPlayer.cardsInPlay.push(card);
+        console.log(targetPlayer.cardsInPlay);
+        console.log(card.name);
         console.log(card.name + " played!");
         console.log("remaining mana:  " + targetPlayer.mana);
         let t = targetPlayer.hand.indexOf(card);
         player1.hand.splice(t, 1);
         console.log("You now have " + targetPlayer.hand + " remaining in your hand");
-      } else {
+      // } else {
         // need to change to message on DOM
-        console.log("not enough mana");
-      }
+        // console.log("not enough mana");
+      // }
     },
 
     setAttack(target) {
@@ -183,14 +193,27 @@ $(() => {
     game.updateHealth(player1);
   });
 
-  $('.hand').on('click', '.card', (e) => {
-    if (game.card.cost <= targetPlayer.mana) {
-      game.playCard(game.card.name);
-      $(e.currentTarget).appendTo(".playerArea1 .inPlay");
+
+
+  $('.hand').on('click', 'card', (e) => {
+    // if (game.card.cost <= game.targetPlayer.mana) {
+      // let i = $('a:focus').attr('arrPlace');
+      // console.log($(e.currentTarget).attr('arrPlace'));
+      let i = $(e.currentTarget).attr('arrPlace');
+      console.log(i);
+      let card = game.availableCreatures[i];
+      console.log(card);
+      // let card = $(e.currentTarget).closest('card');
+      // console.log(card1);
+      // console.log(e.currentTarget);
+      // console.log($(e.currentTarget).closest('div'));
+      game.playCard(player1, card);
+      $(e.currentTarget).closest('card').appendTo(".playerArea1 .inPlay");
       game.updateMana(player1);
-    } else {
-      alert('not enough mana');
-    }
+    // }
+    // else {
+    //   alert('not enough mana');
+    // }
   });
 
   $('.inPlay').on('click', '.attack', (e) => {
