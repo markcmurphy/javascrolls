@@ -57,16 +57,16 @@ $(() => {
       console.log(this.creaturesBuilt);
       // console.log(card);
       if (targetPlayer === player1) {
-        $('<card>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', game.creaturesBuilt).attr(card);
+        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
       } else if (targetPlayer === player2) {
-        $('<card>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').innerHTML = card;
+        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).attr('id', 'this.creaturesBuilt').append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
       }
     },
 
     dealCard(targetPlayer, card) {
       targetPlayer.hand.push(card);
       this.buildCard(targetPlayer, card);
-      game.creaturesBuilt += 1;
+      // game.creaturesBuilt += 1;
       // console.log(this.creaturesBuilt);
       // console.log(card);
 
@@ -142,7 +142,7 @@ $(() => {
         console.log(card.name + " played!");
         console.log("remaining mana:  " + targetPlayer.mana);
         let t = targetPlayer.hand.indexOf(card);
-        player1.hand.splice(t, 1);
+        targetPlayer.hand.splice(t, 1);
         console.log("You now have " + targetPlayer.hand + " remaining in your hand");
       // } else {
         // need to change to message on DOM
@@ -153,8 +153,9 @@ $(() => {
     compTurn() {
       let a = Math.floor((Math.random() * player2.hand.length));
       let card = player1.hand[a];
-      playCard(player2, card);
-      $('card').appendTo(".playerArea2 .inPlay");
+      // console.log(card.id);
+      game.playCard(player2, card);
+    $(".playerArea2 .inPlay").append(card);
     },
 
     setAttack(target) {
@@ -208,7 +209,7 @@ $(() => {
 
 
 
-  $('.hand').on('click', 'card', (e) => {
+  $('.hand').on('click', '.card', (e) => {
     // if (game.card.cost <= game.targetPlayer.mana) {
       // let i = $('a:focus').attr('arrPlace');
       // console.log($(e.currentTarget).attr('arrPlace'));
@@ -221,7 +222,7 @@ $(() => {
       // console.log(e.currentTarget);
       // console.log($(e.currentTarget).closest('div'));
       game.playCard(player1, card);
-      $(e.currentTarget).closest('card').appendTo(".playerArea1 .inPlay");
+      $(e.currentTarget).closest('div').appendTo(".playerArea1 .inPlay");
       game.updateMana(player1);
     // }
     // else {
@@ -261,6 +262,7 @@ $(() => {
   $('.player1TurnOver').on('click', () => {
     console.log("player 1 turn over");
     game.turnBegin(player2);
+    game.compTurn();
   });
 
 
