@@ -9,6 +9,7 @@ $(() => {
       this.attackPoints = attackPoints;
       this.defensePoints = defensePoints;
       this.arrPlace = arrPlace;
+      this.creatureID = 0;
       this.isInPlay = false;
       this.isDead = false;
       this.canAttack = true;
@@ -58,8 +59,10 @@ $(() => {
       // console.log(card);
       if (targetPlayer === player1) {
         $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
+        card.creatureID = this.creaturesBuilt;
       } else if (targetPlayer === player2) {
-        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).attr('id', 'this.creaturesBuilt').append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
+        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
+        card.creatureID = this.creaturesBuilt;
       }
     },
 
@@ -120,6 +123,7 @@ $(() => {
       this.currentPlayersTurn = targetPlayer;
       targetPlayer.mana += 1;
       let a = Math.floor((Math.random() * game.availableCreatures.length));
+      console.log(a);
       let card = game.availableCreatures[a];
       game.dealCard(targetPlayer, card);
       game.updateMana(targetPlayer);
@@ -138,12 +142,13 @@ $(() => {
         targetPlayer.mana -= card.cost;
         targetPlayer.cardsInPlay.push(card);
         console.log(targetPlayer.cardsInPlay);
-        console.log(card.name);
+        console.log(card);
         console.log(card.name + " played!");
         console.log("remaining mana:  " + targetPlayer.mana);
         let t = targetPlayer.hand.indexOf(card);
         targetPlayer.hand.splice(t, 1);
-        console.log("You now have " + targetPlayer.hand + " remaining in your hand");
+        console.log("You now have ", targetPlayer.hand, " remaining in your hand");
+        console.log(card.creatureID);
       // } else {
         // need to change to message on DOM
         // console.log("not enough mana");
@@ -151,11 +156,17 @@ $(() => {
     },
 
     compTurn() {
-      let a = Math.floor((Math.random() * player2.hand.length));
-      let card = player1.hand[a];
-      // console.log(card.id);
+      console.log(player2.hand.length);
+      let a = Math.floor((Math.random() * (player2.hand.length)));
+      console.log(a);
+      let card = player2.hand[a];
+      console.log(card);
+      // console.log($('#creatureID').val());
       game.playCard(player2, card);
-    $(".playerArea2 .inPlay").append(card);
+      console.log("the creature that was played is:", card.creatureID);
+      let $computerSelectedCard = "#" + card.creatureID;
+            // $($computerSelectedCard).closest('div').appendTo(".playerArea2 .inPlay");
+      $('.playerArea2 .inPlay').append($($computerSelectedCard));
     },
 
     setAttack(target) {
@@ -274,7 +285,9 @@ $(() => {
 
 
   // test code
-
+console.log(game.availableCreatures.length);
+let a = Math.floor((Math.random() * game.availableCreatures.length));
+console.log(a);
 
 
 });
