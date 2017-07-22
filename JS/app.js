@@ -155,37 +155,55 @@ $(() => {
       // }
     },
 
+    setAttackComp(card) {
+      if (card.canAttack === true) {
+        console.log("computer attacking with " + card.name);
+        this.attackers.push(card);
+        console.log(this.attackers);
+        let $computerSelectedCard = "#" + card.creatureID;
+        $('.battleField').append($($computerSelectedCard));
+      } else {
+        console.log('can not attack');
+      }
+    },
+
     compTurn() {
       console.log(player2.hand.length);
       let a = Math.floor((Math.random() * (player2.hand.length)));
       console.log(a);
       let card = player2.hand[a];
       console.log(card);
-      // console.log($('#creatureID').val());
       game.playCard(player2, card);
       console.log("the creature that was played is:", card.creatureID);
       let $computerSelectedCard = "#" + card.creatureID;
-            // $($computerSelectedCard).closest('div').appendTo(".playerArea2 .inPlay");
       $('.playerArea2 .inPlay').append($($computerSelectedCard));
+      game.setAttackComp(card);
+
     },
+
+
 
     setAttack(target) {
       if (target.canAttack === true) {
         this.attackers.push(target);
+        let $selectedCard = "#" + target.creatureID;
+        $('.playerArea1 .battleField').append($($selectedCard));
       } else {
-        // console.log('can not attack');
+        console.log('can not attack');
       }
     },
 
-    setDefenders(target) {
-      if (target.canDefend === true) {
-        this.defenders.push(target);
+    setDefenders(card) {
+      if (card.canDefend === true) {
+        this.defenders.push(card);
+        console.log(this.defenders);
       } else {
         console.log('can not defend');
       }
     },
 
     attackPhase() {
+      let x = this.defenders[0];
       let a = this.defenders[0].defensePoints - this.attackers[0].attackPoints;
       let b = this.attackers[0].defensePoints - this.defenders[0].attackPoints;
       if (a <= 0) {
@@ -196,7 +214,38 @@ $(() => {
       };
       console.log(this.defenders[0].isDead);
       console.log(this.attackers[0].isDead);
-    },
+// need to set up seperate graveyards
+
+      for (let i=0; i<this.defenders.length; i++) {
+        console.log(i);
+        if (this.defenders[i].isDead == true) {
+          let $card = "#" + this.defenders[i].creatureID;
+          $('.playerArea1 .graveyard').append($($card));
+          console.log($card);
+          let p1 = player1.hand.indexOf(this.defenders[i]);
+          let p2 = player2.hand.indexOf(this.defenders[i]);
+          player1.cardsInPlay.splice(p1, 1);
+          player2.cardsInPlay.splice(p2, 1);
+        } else {
+          console.log('nothing done');
+      };
+      };
+
+      for (let i=0; i<this.attackers.length; i++) {
+        console.log(i);
+        if (this.attackers[i].isDead == true) {
+          let $card = "#" + this.attackers[i].creatureID;
+          $('.playerArea1 .graveyard').append($($card));
+          console.log($card);
+          let p1 = player1.hand.indexOf(this.attackers[i]);
+          let p2 = player2.hand.indexOf(this.attackers[i]);
+          player1.cardsInPlay.splice(p1, 1);
+          player2.cardsInPlay.splice(p2, 1);
+      } else {
+        console.log('nothing done');
+    };
+    };
+  },
 
     isWon() {
 
@@ -243,7 +292,7 @@ $(() => {
 
   $('.inPlay').on('click', '.attack', (e) => {
     // when clicking A again, needs to return card to In Play
-    if (ghost.canAttack == true) {
+    if (card.canAttack == true) {
       $(e.currentTarget).closest('.card').appendTo(".battleField");
       game.setAttack(this);
     } else {
@@ -252,13 +301,37 @@ $(() => {
   });
 
   $('.inPlay').on('click', '.defend', (e) => {
-    if (ghost.canDefend == true) {
-      $(e.currentTarget).closest('.card').appendTo(".battleField");
-      game.setAttack(this);
-    } else {
-      alert('can not attack')
-    };
-  });
+    // let i = $(e.currentTarget).closest('div').attr('canDefend');
+    // console.log(i);
+    // if (i == true) {
+      // let x = $(e.currentTarget).closest('.card').attr('creatureID');
+      // console.log(x);
+      $(e.currentTarget).closest('div').appendTo(".battleField");
+      let i = $(e.currentTarget).closest('.card').attr('arrPlace');
+      console.log(i);
+      let card = game.availableCreatures[i];
+      console.log(card);
+      // let card = $(e.currentTarget).closest('card');
+      // console.log(card1);
+      // console.log(e.currentTarget);
+      // console.log($(e.currentTarget).closest('div'));
+      // let card = $("#" + $(e.currentTarget).closest('.card').attr('creatureID'));
+
+      // console.log($($selectedCard));
+      // let card = $("");
+      // console.log(y);
+      // console.log($($selectedCard));
+      // $('.playerArea2 .inPlay').append($($computerSelectedCard));
+      // console.log(e.currentTarget);
+      // console.log($(e.currentTarget).closest('div'));
+      // console.log(this);
+
+      game.setDefenders(card);
+      console.log(game.defenders[0]);
+      // alert('can not defend')
+      // } else if (i==false) {
+    }
+  );
 
 
   $('.battleField .card').click(
@@ -276,6 +349,14 @@ $(() => {
     game.compTurn();
   });
 
+  $('.battle').on('click', () => {
+    console.log("battle clicked");
+    console.log(game.attackers[0]);
+    console.log(game.defenders[0]);
+    game.attackPhase();
+    }
+  );
+
 
 // functionality doesn't work yet
   $('.reset').on('click', () => {
@@ -285,9 +366,10 @@ $(() => {
 
 
   // test code
-console.log(game.availableCreatures.length);
-let a = Math.floor((Math.random() * game.availableCreatures.length));
-console.log(a);
+// console.log(game.availableCreatures.length);
+// let a = Math.floor((Math.random() * game.availableCreatures.length));
+// console.log(a);
+// console.log(game.defenders[0].creatureID);
 
 
 });

@@ -44,7 +44,7 @@ body {
 .card {
   flex-direction: row;
   flex-wrap: wrap;
-  height: 95px;
+  height: 75px;
   width: 95px;
   border: 1px solid #108BCD;
   background: #4EBDF8;
@@ -60,7 +60,11 @@ body {
   background: lightgreen;
 }
 
-.graveyard {}
+.graveyard {
+background: #FFD29C;
+border: 3px solid black;
+
+}
 
 .nameButton {}
 
