@@ -3,9 +3,9 @@ $(() => {
   // classes
 
   class Creature {
-    constructor(name, cost, attackPoints, defensePoints, serialNumber){
+    constructor(name, cost, attackPoints, defensePoints, serialNumber) {
       this.name = name;
-    // constructor(name, cost, attackPoints, defensePoints) {
+      // constructor(name, cost, attackPoints, defensePoints) {
       // this.name = name;
       this.cost = cost;
       this.attackPoints = attackPoints;
@@ -20,29 +20,29 @@ $(() => {
       // this.roundsInPlay = 0;
     }
 
-}
-const factory = {
-      creatures: [],
-      createArcher() {
-        const newArcher = new Creature('Archer',2,2,2, this.creatures.length);
-        this.creatures.push(newArcher);
-        return newArcher;
-},
-    createGhost() {
+  }
+const vortex = {
+  creatures: [],
+  createArcher() {
+    const newArcher = new Creature('Archer', 2, 2, 2, this.creatures.length);
+    this.creatures.push(newArcher);
+    return newArcher;
+  },
+  createGhost() {
     const newGhost = new Creature('Ghost', 1, 1, 1, this.creatures.length);
     this.creatures.push(newGhost);
     return newGhost;
-},
-findCreature(index){
-  return this.creatures[index];
-}
+  },
+  findCreature(index) {
+    return this.creatures[index];
+  }
 }
 
-factory.createGhost();
-factory.createGhost();
-factory.createGhost();
-factory.createArcher();
-console.log(factory.creatures);
+// vortex.createGhost();
+// vortex.createGhost();
+// vortex.createGhost();
+// vortex.createArcher();
+// console.log(vortex.creatures);
 
 // const ghost = {
 //       creatures: [],
@@ -80,8 +80,6 @@ console.log(factory.creatures);
 
   const player1 = new Player("Mark");
   const player2 = new Player("Comp");
-  // const ghost = new Creature("ghost", 1, 1, 1, 0, 0);
-  // const archer = new Creature("Archer", 1, 1, 2, 1, 0);
 
   // gameplay
 
@@ -91,28 +89,24 @@ console.log(factory.creatures);
     defenders: [],
     availableCreatures: ["ghost", "archer"],
     currentPlayersTurn: {},
-    creaturesBuilt: 0,
-    allCreatures: [],
+    // creaturesBuilt: 0,
+    // allCreatures: [],
 
     // flipCoin() {
     //
     // }
 
     assignDeck(targetPlayer) {
+      for (let i = 0; i < 30; i++) {
         let a = Math.floor((Math.random() * game.availableCreatures.length));
         let b = game.availableCreatures[a];
-      for (let i=0; i<30; i++) {
         if (b == "ghost") {
-        ghost.create();
-        let y = ghost.findCreature(ghost.creatures.length);
-        targetPlayer.deck.push(y);
-      } else if (b == 'archer') {
-        archer.create();
-        let y = ghost.findCreature(ghost.creatures.length);
-        targetPlayer.deck.push(y);
+          vortex.createGhost();
+        } else if (b == 'archer') {
+          vortex.createArcher();
+        }
+        targetPlayer.deck.push(vortex.creatures[i]);
       }
-      }
-
     },
 
     buildCard(targetPlayer, card) {
@@ -129,13 +123,13 @@ console.log(factory.creatures);
 
     dealCard(targetPlayer, x) {
       if (x == "ghost") {
-        ghost.create();
-        let y = ghost.findCreature(ghost.creatures.length);
+        vortex.createGhost();
+        let y = vortex.findCreature(vortex.creatures.length);
         targetPlayer.hand.push(y);
         game.buildCard(targetPlayer, ghost);
       } else if (x == 'archer') {
-        archer.create();
-        let y = ghost.findCreature(ghost.creatures.length );
+        vortex.createArcher();
+        let y = vortex.findCreature(vortex.creatures.length );
         targetPlayer.hand.push(y);
         game.buildCard(targetPlayer, archer);
       }
@@ -594,7 +588,8 @@ Creature.handleEvent = function(e) {
 
 // ghost.createCard(player1);
 // console.log(ghost.defensePoints);
-// game.assignDeck(player1);
-// console.log(player1.deck);
+
+game.assignDeck(player1);
+console.log(player1.deck);
 
 });
