@@ -84,24 +84,24 @@ const vortex = {
       }
     },
 
-    buildCard(targetPlayer, card) {
-      game.creaturesBuilt += 1;
-      // console.log(this.creaturesBuilt);
-      if (targetPlayer === player1) {
-        // game.allCreatures.push(card);
-        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
-      } else if (targetPlayer === player2) {
-        game.allCreatures.push(card);
-        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', this.creaturesBuilt);
-       }
-    },
+    // buildCard(targetPlayer, card) {
+    //   game.creaturesBuilt += 1;
+    //   // console.log(this.creaturesBuilt);
+    //   if (targetPlayer === player1) {
+    //     // game.allCreatures.push(card);
+    //     $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
+    //   } else if (targetPlayer === player2) {
+    //     game.allCreatures.push(card);
+    //     $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', this.creaturesBuilt);
+    //    }
+    // },
 
     dealCard(targetPlayer, card) {
       targetPlayer.hand.push(card);
       if (targetPlayer === player1) {
         $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', card.serialNumber);
       } else if (targetPlayer === player2) {
-        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', card.serialNumber);
+        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', card.serialNumber);
        }
     },
 
@@ -156,14 +156,10 @@ const vortex = {
     turnBegin(targetPlayer) {
       this.currentPlayersTurn = targetPlayer;
       targetPlayer.mana += 1;
-      let a = Math.floor((Math.random() * game.availableCreatures.length));
-      console.log(a);
-      let card = game.availableCreatures[a];
-      game.dealCard(targetPlayer, card);
+      let a = Math.floor((Math.random() * targetPlayer.deck.length));
+      game.dealCard(targetPlayer, targetPlayer.deck[a]);
       game.updateMana(targetPlayer);
       game.updateMana(targetPlayer);
-      console.log(targetPlayer);
-
       // need to configure to ensure a max of 10 using if statements
 
     },
@@ -182,7 +178,7 @@ const vortex = {
             targetPlayer.hand.splice(t, 1);
             console.log("You now have ", targetPlayer.hand, " remaining in your hand");
           } else {
-            console.log(-1);
+            null;
           }
         };
     },
@@ -192,7 +188,7 @@ const vortex = {
         console.log("computer attacking with " + card.name);
         this.attackers.push(card);
         console.log(this.attackers[0]);
-        let $computerSelectedCard = "#" + card.creatureID;
+        let $computerSelectedCard = "#" + card.serialNumber;
         $('.battleField').append($($computerSelectedCard));
       } else {
         console.log('can not attack');
@@ -202,12 +198,12 @@ const vortex = {
     compTurn() {
       console.log(player2.hand.length);
       let a = Math.floor((Math.random() * (player2.hand.length)));
-      console.log(a);
       let card = player2.hand[a];
-      console.log(card);
       game.playCard(player2, card);
-      console.log("the creature that was played is:", card.creatureID);
-      let $computerSelectedCard = "#" + card.creatureID;
+      console.log("computer played a ", card.name);
+      // let $computerSelectedCard = "#" + card.creatureID;
+      let $computerSelectedCard = "#" + card.serialNumber;
+
       $('.playerArea2 .inPlay').append($($computerSelectedCard));
       game.setAttackComp(card);
 
@@ -366,108 +362,16 @@ const vortex = {
   });
 
   $('.inPlay').on('click', '.defend', (e) => {
-    // let i = $(e.currentTarget).closest('div').attr('canDefend');
-    // console.log(i);
-    // if (i == true) {
-    // var index = $(e).index();
-    // console.log(index);
-      let x = $(e.currentTarget).closest('div');
-      game.defenders.push(x);
-      // console.log(x);
-      // let $card = "#" + x;
-      // var listItem = $("#" + x);
-      // console.log(listItem);
-      // let cardsArr = player1.cardsInPlay;
-      // let id = $('div').attr('id');
-      // let ind = $.inArray(x,cardsArr);
-      // console.log(ind);
-// let ind = cardsArr.index(listItem);
-// console.log(ind);
-// console.log(player1.cardsInPlay[0].id);
-// let ind = () => {
-//   for (let i=0; i<player1.cardsInPlay.length; i++) {
-//     if (player1.cardsInPlay[i].id == x) {
-//       return i;
-//   } else {  return -1;
-//   } }
-// };
-
-// console.log(ind());
-
-// let index = player1.cardsInPlay.map(function(el) {
-  // return el.id;
-// }).indexOf($card);
-
-// console.log(index);
-
-      // console.log(cardsArr[0]);
-
-
-
-
-
-      // let t = player1.cardsInPlay.indexOf("id:" + x);
-      // console.log(t);
-      // targetPlayer.hand.splice(t, 1);
-      // console.log("Index: " + $(".card").index(listItem));
-      // console.log(cardsArr[$(".card").index(listItem)]);
-      // let card = $.grep(cardsArr, function(creature) {
-      // return creature.id === x;
-      // });
-      //
-      // $.grep(cardsArr, function(creature) {
-      // return Creature.id === x;
-      // })
-      //
-      // let cardx = $("div").filter($('id:' + 1))
-      // console.log(cardx);
-
-// function findCreature(creature) {
-  // return creature.id === "x";
-// }
-
-// console.log(cardsArr.find(findCreature));
-
-
-      // console.log(card);
-
-      $('.battleField').append($(x));
-      // setDefenders(card) {
-      //   if (card.canDefend === true) {
-      //     this.defenders.push(card);
-      //     console.log(this.defenders[0]);
-      //   } else {
-      //     console.log('can not defend');
-      //   }
-      // },
-      // console.log($card);
-
-      // $(e.currentTarget).closest('div').appendTo(".battleField");
-      // let i = $(e.currentTarget).closest('.card').attr('arrPlace');
-      // console.log(i);
-      // let card = game.availableCreatures[i];
-      // console.log(card);
-      // let card = $(e.currentTarget).closest('card');
-      // console.log(card1);
-      // console.log(e.currentTarget);
-      // console.log($(e.currentTarget).closest('div'));
-      // let card = $("#" + $(e.currentTarget).closest('.card').attr('creatureID'));
-
-      // console.log($($selectedCard));
-      // let card = $("");
-      // console.log(y);
-      // console.log($($selectedCard));
-      // $('.playerArea2 .inPlay').append($($computerSelectedCard));
-      // console.log(e.currentTarget);
-      // console.log($(e.currentTarget).closest('div'));
-      // console.log(this);
-
-      game.setDefenders(x);
-      console.log(game.defenders[0]);
-      // alert('can not defend')
-      // } else if (i==false) {
+    let card = $(e.currentTarget).attr('serialNumber');
+    if (card.canDefend == true) {
+      game.defenders.push(card);
+      $(e.currentTarget).closest('div').appendTo(".battleField");
+      game.setDefenders(card);
     }
-  );
+    else {
+      alert('can not defend this turn, select another card');
+    };
+  });
 
 
   $('.battleField .card').click(
