@@ -38,34 +38,6 @@ const vortex = {
   }
 }
 
-// vortex.createGhost();
-// vortex.createGhost();
-// vortex.createGhost();
-// vortex.createArcher();
-// console.log(vortex.creatures);
-
-// const ghost = {
-//       creatures: [],
-//
-// },
-// findCreature(index){
-//   return ghost.creatures[index];
-// }
-// }
-//
-// archer.create();
-// const archer = new Generator('Archer',2, 2, 2,);
-// archer.create();
-// ghost.create();
-// archer.create();
-// const ghost = new Generator('Ghost', 1, 1, 1,);
-// archer.createCreature();
-// ghost.createCreature();
-// archer.createCreature();
-// console.log(archer.creatures);
-// console.log(ghost.findCreature(0));
-
-
   class Player {
     constructor(name) {
       this.name = name;
@@ -92,9 +64,12 @@ const vortex = {
     // creaturesBuilt: 0,
     // allCreatures: [],
 
-    // flipCoin() {
-    //
-    // }
+    flipCoin() {
+      let availablePlayers = [player1, player2];
+      let a = Math.floor((Math.random() * availablePlayers.length));
+      let b = availablePlayers[a];
+      console.log(b);
+    },
 
     assignDeck(targetPlayer) {
       for (let i = 0; i < 30; i++) {
@@ -178,6 +153,7 @@ const vortex = {
       this.currentPlayersTurn = targetPlayer;
       targetPlayer.mana += 1;
       game.assignDeck(player1);
+      game.assignDeck(player2);
       game.dealFirstHand(player1);
       game.dealFirstHand(player2);
       game.updateHealth(player1);
@@ -588,8 +564,5 @@ Creature.handleEvent = function(e) {
 
 // ghost.createCard(player1);
 // console.log(ghost.defensePoints);
-
-game.assignDeck(player1);
-console.log(player1.deck);
-
+ game.flipCoin();
 });
