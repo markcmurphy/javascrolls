@@ -68,7 +68,7 @@ const vortex = {
       let availablePlayers = [player1, player2];
       let a = Math.floor((Math.random() * availablePlayers.length));
       let b = availablePlayers[a];
-      console.log(b);
+      // game.startGame(b);
     },
 
     assignDeck(targetPlayer) {
@@ -96,37 +96,21 @@ const vortex = {
        }
     },
 
-    dealCard(targetPlayer, x) {
-      if (x == "ghost") {
-        vortex.createGhost();
-        let y = vortex.findCreature(vortex.creatures.length);
-        targetPlayer.hand.push(y);
-        game.buildCard(targetPlayer, ghost);
-      } else if (x == 'archer') {
-        vortex.createArcher();
-        let y = vortex.findCreature(vortex.creatures.length );
-        targetPlayer.hand.push(y);
-        game.buildCard(targetPlayer, archer);
-      }
-
-      // console.log(x);
-      // targetPlayer.hand.push(y);
-    //   this.buildCard(targetPlayer, card);
-    //   // game.creaturesBuilt += 1;
-    //   // console.log(this.creaturesBuilt);
-    //   // console.log(card);
-    //
-    //   // console.log(targetPlayer.hand[0]);
-    // },
-  },
+    dealCard(targetPlayer, card) {
+      targetPlayer.hand.push(card);
+      if (targetPlayer === player1) {
+        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', card.serialNumber);
+      } else if (targetPlayer === player2) {
+        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', card.serialNumber);
+       }
+    },
 
 
 
     dealFirstHand(targetPlayer) {
       for (let i = 0; i < 3; i++) {
-        let a = Math.floor((Math.random() * game.availableCreatures.length));
-        game.dealCard(targetPlayer, game.availableCreatures[a]);
-        // console.log(a);
+        let a = Math.floor((Math.random() * targetPlayer.deck.length));
+        game.dealCard(targetPlayer, targetPlayer.deck[a]);
       };
 
     },
@@ -185,47 +169,22 @@ const vortex = {
     },
 
     playCard(targetPlayer, num) {
-      console.log(num);
-      // console.log(targetPlayer.hand[0].id);
-      let arr = targetPlayer.hand;
-      console.log(arr[0].id);
-      // console.log(arr.find(arr.id === arr.num).name);
-// let $card = $('#'+num);
-// console.log($($card).name);
-// console.log(card);
-//       let lookup = {};
-//       for (let i = 0; i<targetPlayer.hand.length;i++) {
-//         lookup[targetPlayer.hand[i].id] = targetPlayer.hand[i];
-//       }
-//       console.log(lookup[num]);
-        // if (card.cost <= targetPlayer.mana) {
+        let arr = targetPlayer.hand;
         for (let i=0; i< arr.length; i++) {
-          console.log(arr[i].id);
-          if (arr[i].id == num) {
-            console.log(i);
-            console.log(arr[i]);
+          if (arr[i].serialNumber == num) {
             const card = arr[i];
+            card.isInPlay = true;
+            targetPlayer.cardsInPlay.push(card);
+            targetPlayer.mana -= card.cost;
+            console.log(card.name + " played!");
+            console.log("remaining mana:  " + targetPlayer.mana);
+            let t = targetPlayer.hand.indexOf(card);
+            targetPlayer.hand.splice(t, 1);
+            console.log("You now have ", targetPlayer.hand, " remaining in your hand");
           } else {
             console.log(-1);
           }
         };
-        // console.log(card);
-        // card.isInPlay = true;
-        // // need to set method for isInPlay to display card
-        // targetPlayer.mana -= card.cost;
-        // targetPlayer.cardsInPlay.push(card);
-        // console.log(targetPlayer.cardsInPlay);
-        // console.log(card);
-        // console.log(card.name + " played!");
-        // console.log("remaining mana:  " + targetPlayer.mana);
-        // let t = targetPlayer.hand.indexOf(card);
-        // targetPlayer.hand.splice(t, 1);
-        // console.log("You now have ", targetPlayer.hand, " remaining in your hand");
-        // console.log(card.creatureID);
-      // } else {
-        // need to change to message on DOM
-        // console.log("not enough mana");
-      // }
     },
 
     setAttackComp(card) {
@@ -389,8 +348,7 @@ const vortex = {
       // let card = $(e.currentTarget).closest('card');
       // console.log(card1);
       // console.log(e.currentTarget);
-      let card = $(e.currentTarget).attr('id');
-      console.log(card);
+      let card = $(e.currentTarget).attr('serialNumber');
       game.playCard(player1, card);
       $(e.currentTarget).closest('div').appendTo(".playerArea1 .inPlay");
       game.updateMana(player1);
