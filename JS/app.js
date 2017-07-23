@@ -19,11 +19,12 @@ $(() => {
     }
 
 createCard (targetPlayer) {
-    if (targetPlayer === player1) { $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(this.name + ' cost: ' + this.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr('id', this.creatureID++);
-} else if (targetPlayer === player2) {
+    if (targetPlayer === player1) {
+       $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(this.name + ' cost: ' + this.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr('id', this.creatureID++);
+       }
+  else if (targetPlayer === player2) {
   $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(this.name + ' cost: ' + this.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', this.creatureID++);
 }
-targetPlayer.hand.push(Creature);
   }
 }
 
@@ -82,7 +83,7 @@ targetPlayer.hand.push(Creature);
 
     dealCard(targetPlayer, creature) {
       creature.createCard(targetPlayer);
-    //   targetPlayer.hand.push(card);
+      targetPlayer.hand.push(creature);
     //   this.buildCard(targetPlayer, card);
     //   // game.creaturesBuilt += 1;
     //   // console.log(this.creaturesBuilt);
@@ -128,6 +129,8 @@ targetPlayer.hand.push(Creature);
       game.updateHealth(player2);
       game.updateMana(player1);
       game.updateMana(player2);
+      console.log(player1.hand);
+      console.log(player2.hand);
     },
 
     roundBegin() {
