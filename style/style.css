@@ -20,9 +20,9 @@ body {
   flex-direction: column;
   height: 400px;
   min-width: 450px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
   background-color: lavender;
   border: 3px solid lavender;
 }
@@ -34,14 +34,15 @@ body {
   flex-direction: column;
   height: 400px;
   min-width: 450px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
   background-color: lavender;
   border: 3px solid lavender;
 }
 
 .card {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   height: 75px;
@@ -60,13 +61,50 @@ body {
   background: lightgreen;
 }
 
+.slot {
+  width:25%;
+  border: 1px solid purple;
+  display: flex;
+}
+
 .graveyard {
 background: #FFD29C;
 border: 3px solid black;
+flex-direction: row;
+flex-shrink: 30%;
 
 }
 
+Archer {
+  background-image: url('http://i.imgur.com/OGDnCY4.png');
+}
+
 .nameButton {}
+
+.attackers {
+  display:flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin: 4px;
+  padding: 4px;
+  height:90px;
+  width: 47%;
+  border: 3px solid black;
+  text-align: center;
+}
+
+.defenders {
+    display:flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    height:90px;
+    width: 47%;
+    margin: 4px;
+    padding: 4px;
+    border: 3px solid black;
+    text-align: center;
+
+}
 
 .battleField {
   display: flex;
@@ -75,9 +113,9 @@ border: 3px solid black;
   background: #FFD29C;
   height: 100px;
   width: auto;
-  margin: 10px;
-  padding: 5px;
-  border: 3px solid rgb(255, 142, 7);
+  margin: 4px;
+  padding: 4px;
+  border: 1px solid rgb(255, 142, 7);
   text-align: center;
 }
 

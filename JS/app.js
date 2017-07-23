@@ -15,9 +15,12 @@ $(() => {
       // this.creatureID = creatureID;
       this.isInPlay = false;
       this.isDead = false;
-      this.canAttack = true;
+      this.canAttack = false;
       this.canDefend = true;
-      // this.roundsInPlay = 0;
+      this.roundsInPlay = 0;
+      this.attackSlot = "";
+      this.defenseSlot= "";
+      this.isBlocked = false;
     }
 
   }
@@ -47,6 +50,16 @@ const vortex = {
       this.graveyard = [];
       this.mana = 0;
       this.cardsInPlay = [];
+      this.a1 = [];
+      this.a2 = [];
+      this.a3 = [];
+      this.a4 = [];
+      this.d1 = [];
+      this.d2 = [];
+      this.d3 = [];
+      this.d4 = [];
+      this.defenders = [];
+      this.attackers = [];
     }
   }
 
@@ -61,6 +74,7 @@ const vortex = {
     defenders: [],
     availableCreatures: ["ghost", "archer"],
     currentPlayersTurn: {},
+    numberOfTurns: [],
     // creaturesBuilt: 0,
     // allCreatures: [],
 
@@ -95,15 +109,25 @@ const vortex = {
     //     $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', this.creaturesBuilt);
     //    }
     // },
+    backgrounds() {
+      $('[name=Archer]').css({
+        'background-image': "url('http://i.imgur.com/OGDnCY4.png')",
+        'background-size': "cover",
+      });
+    },
+
+
 
     dealCard(targetPlayer, card) {
       targetPlayer.hand.push(card);
-      if (targetPlayer === player1) {
-        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', card.serialNumber);
-      } else if (targetPlayer === player2) {
-        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', card.serialNumber);
+      if (targetPlayer == player1) {
+        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('player','player1').attr('id', card.serialNumber);
+      } else if (targetPlayer == player2) {
+        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', card.serialNumber).attr('player',"player2");
        }
+       game.backgrounds();
     },
+
 
 
 
@@ -116,9 +140,9 @@ const vortex = {
     },
 
     updateMana(targetPlayer) {
-      if (targetPlayer === player1) {
+      if (targetPlayer == player1) {
         $('.manaStats1').text('Mana: ' + targetPlayer.mana);
-      } else if (targetPlayer === player2) {
+      } else if (targetPlayer == player2) {
         $('.manaStats2').text('Mana: ' + targetPlayer.mana);
       }
     },
@@ -159,10 +183,10 @@ const vortex = {
       let a = Math.floor((Math.random() * targetPlayer.deck.length));
       game.dealCard(targetPlayer, targetPlayer.deck[a]);
       game.updateMana(targetPlayer);
-      game.updateMana(targetPlayer);
+      game.updateHealth(targetPlayer);
+    },
       // need to configure to ensure a max of 10 using if statements
 
-    },
 
     playCard(targetPlayer, num) {
         let arr = targetPlayer.hand;
@@ -185,12 +209,18 @@ const vortex = {
             console.log('not played');
           }
         };
+        game.updateMana(targetPlayer);
+        game.updateHealth(targetPlayer);
     },
 
     compTurn() {
       console.log(player2.hand.length);
-      let a = Math.floor((Math.random() * (player2.hand.length)));
-      let card = player2.hand[a];
+      let canPlay = $.map(player2.hand, function(e,i){
+      if(e.cost <= player2.mana) return e;
+      });
+      console.log(canPlay);
+      let a = Math.floor((Math.random() * (canPlay.length)));
+      let card = canPlay[a];
       console.log(card);
       game.playCard(player2, card);
       console.log("computer played a ", card.name);
@@ -203,114 +233,102 @@ const vortex = {
     setAttackComp() {
       console.log(player2.cardsInPlay.length);
       let a = Math.floor((Math.random() * (player2.cardsInPlay.length)));
-      let card = player2.cardsInPlay[a];
-      console.log(card);
-      if (card.canAttack == true) {
-        console.log("computer attacking with " + card.name);
-        this.attackers.push(card);
-        let $computerSelectedCard = "#" + card.serialNumber;
-        $('.battleField').append($($computerSelectedCard));
+      let attacker = player2.cardsInPlay[a];
+      console.log(attacker);
+      if (attacker.canAttack == true) {
+        console.log("computer attacking with " + attacker.name);
+        this.attackers.push(attacker);
+        // player2.a1.push(attacker);
+        let $computerSelectedCard = "#" + attacker.serialNumber;
+        $('.battleField #a1').append($($computerSelectedCard));
       } else {
         console.log('can not attack this turn');
       }
     },
 
-
-
-
     setAttack(target) {
       if (target.canAttack === true) {
         this.attackers.push(target);
-        let $selectedCard = "#" + target.creatureID;
-        $('.playerArea1 .battleField').append($($selectedCard));
+        let $selectedCard = "#" + target.serialNumber;
+        $('.battleField #a1').append($($selectedCard));
       } else {
         console.log('can not attack');
       }
     },
 
-    setDefenders(x) {
-      game.defenders.push(x);
+    setDefenders(targetPlayer,card) {
+      let arr = targetPlayer.cardsInPlay;
+      for (let i=0; i< arr.length; i++) {
+      console.log(arr[i].serialNumber)
+      if (arr[i].serialNumber == card.serialNumber || arr[i].serialNumber == card){
+        const defender = arr[i];
+        game.defenders.push(defender);
+        game.attackers[0].isBlocked=true;
+        // targetPlayer.d1.push(defender);
+        console.log(game.defenders);
+        console.log(defender.name + " defending!");
+        // let t = targetPlayer.cardsInPlay.indexOf(defender);
+        // targetPlayer.cardsInPlay.splice(t, 1);
+      } else {
+        console.log('can not defend');
+      }
+    }
+  },
 
-      // if (card.canDefend === true) {
-      // console.log(player1.cardsInPlay[0]);
-      // console.log(num);
-      // console.log(player1.cardsInPlay.length);
-
-      // let $selectedCard = "#" + num;
-      // let ind = $('player1.cardsInPlay').find($($selectedCard));
-      // console.log(ind);
-
-// let tyt = $('div#'+ num);
-// console.log(tyt);
-
-// console.log($(player1.cardsInPlay[0]).data('id'));
-      // var arrayOfIds = $.map($('#'+num), function(n, i){
-  // return n.id;
-// });
-// console.log(arrayOfIds);
-// console.log(player1.cardsInPlay[0].id);
-// console.log(player1.cardsInPlay[0].id);
-      // for (let i=0; i<player1.cardsInPlay.length; i++) {
-        // console.log(player1.cardsInPlay[i].creatureID);
-        // if (player1.cardsInPlay[i].id == num) {
-          // console.log(i);
-          // return i;
-      // } else {
-        // console.log(-1);
-      // }
-    // };
+    attackPhase(attacker,defender) {
+      for (let i=0; i<this.attackers.length;i++) {
+        let a = this.defenders[i].defensePoints - this.attackers[i].attackPoints;
+        let b = this.attackers[i].defensePoints - this.defenders[i].attackPoints;
+        if (a <= 0) {
+          this.defenders[i].isDead = true;
+        };
+        if (b <= 0) {
+          this.attackers[i].isDead = true;
+        };
+        if (this.attackers.length > this.defenders.length) {
+          console.log($('game.attackers').attr('isBlocked','false'));
+        };
+        console.log(this.defenders[i].isDead);
+        console.log(this.attackers[i].isDead);
+      }
 
 
-        // this.defenders.push(card);
-        // console.log(this.defenders[0]);
-      // } else {
-        // console.log('can not defend');
-      // }
-    },
-
-    attackPhase() {
-      let x = this.defenders[0];
-      let a = this.defenders[0].defensePoints - this.attackers[0].attackPoints;
-      let b = this.attackers[0].defensePoints - this.defenders[0].attackPoints;
-      if (a <= 0) {
-        this.defenders[0].isDead = true;
-      };
-      if (b <= 0) {
-        this.attackers[0].isDead = true;
-      };
-      console.log(this.defenders[0].isDead);
-      console.log(this.attackers[0].isDead);
-// need to set up seperate graveyards
 
       for (let i=0; i<this.defenders.length; i++) {
-        console.log(i);
-        if (this.defenders[i].isDead === true) {
-          let $cardAtt = "#" + this.defenders[i].creatureID;
-          $('.playerArea1 .graveyard').append($($cardAtt));
-          console.log($cardAtt);
-          let p1 = player1.hand.indexOf(this.defenders[i]);
-          let p2 = player2.hand.indexOf(this.defenders[i]);
+        if (this.defenders[i].isDead == true) {
+          let $card = "#" + this.defenders[i].serialNumber;
+          // $('.graveyard').append($($card));
+          $($card).remove();
+          console.log($card);
+          let p1 = player1.cardsInPlay.indexOf(this.defenders[i]);
+          let p2 = player2.cardsInPlay.indexOf(this.defenders[i]);
           player1.cardsInPlay.splice(p1, 1);
           player2.cardsInPlay.splice(p2, 1);
         } else {
-          console.log('nothing done');
+          $('.card','.defenders','[player=player1]').appendTo('.playerArea1 .inPlay');
+          $('.card','.defenders'),'[player=player2]'.appendTo('.playerArea2 .inPlay');
+          // $('.player2').appendTo('.playerArea2 .inPlay')
       };
       };
+      this.defenders = [];
 
       for (let i=0; i<this.attackers.length; i++) {
         console.log(i);
-        if (this.attackers[i].isDead === true) {
-          let $cardDef = "#" + this.attackers[i].creatureID;
-          $('.playerArea1 .graveyard').append($($cardDef));
-          console.log($cardDef);
-          let p1 = player1.hand.indexOf(this.attackers[i]);
-          let p2 = player2.hand.indexOf(this.attackers[i]);
+        let $card = this.attackers[i].serialNumber;
+        if (this.attackers[i].isDead == true) {
+          let $card = this.attackers[i].serialNumber;
+          // $('.graveyard').append($($card));
+          $($card).remove();
+          console.log($card);
+          let p1 = player1.cardsInPlay.indexOf(this.attackers[i]);
+          let p2 = player2.cardsInPlay.indexOf(this.attackers[i]);
           player1.cardsInPlay.splice(p1, 1);
           player2.cardsInPlay.splice(p2, 1);
-      } else {
-        console.log('nothing done');
-    };
-
+      } else if (this.attackers[i].isDead == false) {
+          $('.card','.attackers','[player=player2]').appendTo('.playerArea2 .inPlay');
+          $('.card','.attackers','[player=player1]').appendTo('.playerArea1 .inPlay');
+    }
+this.attackers = [];
     };
 
     console.log(player1.cardsInPlay);
@@ -329,14 +347,10 @@ const vortex = {
 
   }
 
-
-  // listening
   $('.start').on('click', () => {
     game.startGame(player1);
     game.roundBegin(player1);
-    // game.turnBegin(player1);
-    // game.updateMana(player1);
-    // game.updateHealth(player1);
+
   });
 
 
@@ -355,14 +369,13 @@ const vortex = {
     }
   });
 
-
-
-
   $('.inPlay').on('click', '.attack', (e) => {
     // when clicking A again, needs to return card to In Play
-    if (card.canAttack == true) {
+    let canAttack = $(e.currentTarget).closest('.div').attr('canAttack');
+    let card = $(e.currentTarget).closest('.div').attr('serialNumber');
+    if (canAttack == true) {
       $(e.currentTarget).closest('.card').appendTo(".battleField");
-      game.setAttack(this);
+      game.setAttack(card);
     } else {
       alert('can not attack')
     };
@@ -373,9 +386,8 @@ const vortex = {
     console.log(defendStatus);
     if (defendStatus == 'true') {
       let card = $(e.currentTarget).closest('div').attr('serialNumber');
-      game.defenders.push(card);
-      $(e.currentTarget).closest('div').appendTo(".battleField");
-      game.setDefenders(card);
+      $(e.currentTarget).closest('div').appendTo(".battleField #d1");
+      game.setDefenders(player1,card);
     }
     else {
       alert('can not defend this turn, select another card');
@@ -394,17 +406,40 @@ const vortex = {
 
   $('.player1TurnOver').on('click', () => {
     console.log("player 1 turn over");
+    let targetPlayer = player1;
+    for (let i=0; i<targetPlayer.cardsInPlay.length; i++) {
+    targetPlayer.cardsInPlay[i].roundsInPlay+=1;
+    if (targetPlayer.cardsInPlay[i].roundsInPlay >= 1) {
+      targetPlayer.cardsInPlay[i].canAttack = true;
+    }};
+
     game.turnBegin(player2);
     game.compTurn();
   });
 
   $('.battle').on('click', () => {
     console.log("battle clicked");
-    console.log(game.attackers[0]);
-    console.log(game.defenders[0]);
-    game.attackPhase();
+    // console.log(game.attackers[0]);
+    // console.log(game.defenders[0]);
+    console.log(game.currentPlayersTurn);
+    if (game.currentPlayersTurn !== player1) {
+      let defender = player1;
+      game.attackPhase(game.currentPlayersTurn,player1);
+    } else {
+      game.attackPhase(player1, game.currentPlayersTurn);
+    }
     }
   );
+
+  $('.player2TurnOver').on('click',() => {
+    let targetPlayer = player2;
+    for (let i=0; i<targetPlayer.cardsInPlay.length; i++) {
+    targetPlayer.cardsInPlay[i].roundsInPlay+=1;
+    if (targetPlayer.cardsInPlay[i].roundsInPlay >= 1) {
+      targetPlayer.cardsInPlay[i].canAttack = true;
+    };
+    game.turnBegin(player1);
+  }});
 
 Creature.handleEvent = function(e) {
   switch (e.type) {
@@ -422,12 +457,8 @@ Creature.handleEvent = function(e) {
 
 
   // test code
-// console.log(game.availableCreatures.length);
-// let a = Math.floor((Math.random() * game.availableCreatures.length));
-// console.log(a);
-// console.log(game.defenders[0].creatureID);
 
-// ghost.createCard(player1);
-// console.log(ghost.defensePoints);
  game.flipCoin();
+
+
 });
