@@ -339,23 +339,17 @@ const vortex = {
 
 
   $('.hand').on('click', '.card', (e) => {
-    // if (game.card.cost <= game.targetPlayer.mana) {
-      // let i = $('a:focus').attr('arrPlace');
-      // console.log($(e.currentTarget).attr('arrPlace'));
-      // let i = $(e.currentTarget).attr('arrPlace');
-      // let card = game.availableCreatures[i];
-      // console.log(card);
-      // let card = $(e.currentTarget).closest('card');
-      // console.log(card1);
-      // console.log(e.currentTarget);
-      let card = $(e.currentTarget).attr('serialNumber');
+    let cost = $(e.currentTarget).attr('cost');
+    let mana = player1.mana;
+    if (cost <= mana) {
+    let card = $(e.currentTarget).attr('serialNumber');
       game.playCard(player1, card);
       $(e.currentTarget).closest('div').appendTo(".playerArea1 .inPlay");
       game.updateMana(player1);
-    // }
-    // else {
-    //   alert('not enough mana');
-    // }
+    }
+    else {
+      alert('not enough mana, select another card');
+    }
   });
 
 
