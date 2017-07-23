@@ -166,8 +166,12 @@ const vortex = {
 
     playCard(targetPlayer, num) {
         let arr = targetPlayer.hand;
+        console.log(arr);
+        console.log(num);
+        console.log(targetPlayer);
         for (let i=0; i< arr.length; i++) {
-          if (arr[i].serialNumber == num) {
+        console.log(arr[i].serialNumber)
+          if (arr[i].serialNumber == num.serialNumber || arr[i].serialNumber == num){
             const card = arr[i];
             card.isInPlay = true;
             targetPlayer.cardsInPlay.push(card);
@@ -178,36 +182,39 @@ const vortex = {
             targetPlayer.hand.splice(t, 1);
             console.log("You now have ", targetPlayer.hand, " remaining in your hand");
           } else {
-            null;
+            console.log('not played');
           }
         };
-    },
-
-    setAttackComp(card) {
-      if (card.canAttack === true) {
-        console.log("computer attacking with " + card.name);
-        this.attackers.push(card);
-        console.log(this.attackers[0]);
-        let $computerSelectedCard = "#" + card.serialNumber;
-        $('.battleField').append($($computerSelectedCard));
-      } else {
-        console.log('can not attack');
-      }
     },
 
     compTurn() {
       console.log(player2.hand.length);
       let a = Math.floor((Math.random() * (player2.hand.length)));
       let card = player2.hand[a];
+      console.log(card);
       game.playCard(player2, card);
       console.log("computer played a ", card.name);
       // let $computerSelectedCard = "#" + card.creatureID;
       let $computerSelectedCard = "#" + card.serialNumber;
-
       $('.playerArea2 .inPlay').append($($computerSelectedCard));
-      game.setAttackComp(card);
-
+      game.setAttackComp();
     },
+
+    setAttackComp() {
+      console.log(player2.cardsInPlay.length);
+      let a = Math.floor((Math.random() * (player2.cardsInPlay.length)));
+      let card = player2.cardsInPlay[a];
+      console.log(card);
+      if (card.canAttack == true) {
+        console.log("computer attacking with " + card.name);
+        this.attackers.push(card);
+        let $computerSelectedCard = "#" + card.serialNumber;
+        $('.battleField').append($($computerSelectedCard));
+      } else {
+        console.log('can not attack this turn');
+      }
+    },
+
 
 
 
@@ -362,8 +369,10 @@ const vortex = {
   });
 
   $('.inPlay').on('click', '.defend', (e) => {
-    let card = $(e.currentTarget).attr('serialNumber');
-    if (card.canDefend == true) {
+    let defendStatus = $(e.currentTarget).closest('.card').attr('canDefend');
+    console.log(defendStatus);
+    if (defendStatus == 'true') {
+      let card = $(e.currentTarget).closest('div').attr('serialNumber');
       game.defenders.push(card);
       $(e.currentTarget).closest('div').appendTo(".battleField");
       game.setDefenders(card);
