@@ -69,7 +69,7 @@ const vortex = {
   // gameplay
 
   const game = {
-    roundNumber: 0,
+    roundNumber: 1,
     attackers: [],
     defenders: [],
     availableCreatures: ["ghost", "archer"],
@@ -159,6 +159,7 @@ const vortex = {
     startGame(targetPlayer) {
       console.log('Game started!');
       this.currentPlayersTurn = targetPlayer;
+      this.roundNumber+=1;
       targetPlayer.mana += 1;
       game.assignDeck(player1);
       game.assignDeck(player2);
@@ -173,16 +174,21 @@ const vortex = {
     },
 
     turnBegin(targetPlayer) {
-    //   this.currentPlayersTurn = targetPlayer;
+      console.log(targetPlayer);
+      this.currentPlayersTurn = targetPlayer;
       this.numberOfTurns += 1;
-      // if (this.numberOfTurns % 2 == 0) {
-      // this.roundNumber += 1;
-      // };
-      // if (this.roundNumber <= 10) {
-      // targetPlayer.mana = this.roundNumber;
-    // } else {
-      targetPlayer.mana += 1;
-    // };
+      console.log(this.numberOfTurns);
+      if (this.numberOfTurns % 2 === 0) {
+      this.roundNumber += 1;
+      console.log(this.roundNumber);
+    } else {
+      console.log('bleh');
+    };
+      if (this.roundNumber > 1 && this.roundNumber < 10) {
+      targetPlayer.mana = this.roundNumber;
+    } else {
+      targetPlayer.mana = 10;
+    };
       let a = Math.floor((Math.random() * targetPlayer.deck.length));
       game.dealCard(targetPlayer, targetPlayer.deck[a]);
       game.updateMana(targetPlayer);
@@ -216,7 +222,7 @@ const vortex = {
         game.updateHealth(targetPlayer);
     },
 
-    compTurn() {
+    checkCompHand() {
       let canPlay = [];
       for (let i=0; i< player2.hand.length; i++) {
         console.log(i);
@@ -230,19 +236,26 @@ const vortex = {
           console.log('-1');
         };
       };
-      console.log(canPlay);
-      // let canPlay = $.map(player2.hand, function(e) {
-      // if (e.cost <= player2.mana)
-      // return e;
-      // });
-      // console.log(canPlay);
-      let a = Math.floor((Math.random() * (canPlay.length)));
-      let card = canPlay[a];
-      console.log(card);
-      game.playCard(player2, card);
-      console.log("computer played a ", card.name);
-      let $computerSelectedCard = "#" + card.serialNumber;
-      $('.playerArea2 .inPlay').append($($computerSelectedCard));
+      return canPlay;
+    },
+
+    compRecheck() {
+        let canPlay = game.checkCompHand();
+        let a = Math.floor((Math.random() * (canPlay.length)));
+        let card = canPlay[a];
+        console.log(card);
+        game.playCard(player2, card);
+        console.log("computer played a ", card.name);
+        let $computerSelectedCard = "#" + card.serialNumber;
+        $('.playerArea2 .inPlay').append($($computerSelectedCard));
+        if (player2.mana >= 1) {
+          game.checkCompHand();
+        };
+    },
+
+    compTurn() {
+      game.checkCompHand();
+      game.compRecheck();
       game.setAttackComp();
     },
 
@@ -262,6 +275,20 @@ const vortex = {
       }
     },
 
+    setDefendComp() {
+      console.log(player2.cardsInPlay.length);
+      let a = Math.floor((Math.random() * (player2.cardsInPlay.length)));
+      let defender = player2.cardsInPlay[a];
+      // console.log(attacker);
+      // if (attacker.canAttack == true) {
+        console.log("computer defending with " + defender.name);
+        this.defenders.push(defender);
+        // player2.a1.push(attacker);
+        let $computerSelectedCard = "#" + defender.serialNumber;
+        $('.battleField #d1').append($($computerSelectedCard));
+
+    },
+
     // if (attackStatus == 'true') {
     //   $(e.currentTarget).closest('.card').appendTo(".battleField");
     //   game.setAttack(card);
@@ -271,37 +298,32 @@ const vortex = {
 
 
     setAttack(target) {
-      // console.log(target);
-      // console.log(vortex.findCreature(target));
       this.attackers.push(vortex.findCreature(target));
-
-
       let $selectedCard = "#" + target;
-      // let $selectedCard = target.serialNumber;
-      // if (target.canAttack == true) {
         $('.battleField #a1').append($($selectedCard));
-      // } else {
-        // console.log('can not attack');
-      // }
+      game.setDefendComp();
     },
 
     setDefenders(targetPlayer,card) {
-      let arr = targetPlayer.cardsInPlay;
-      for (let i=0; i< arr.length; i++) {
-      console.log(arr[i].serialNumber)
-      if (arr[i].serialNumber == card.serialNumber || arr[i].serialNumber == card){
-        const defender = arr[i];
-        game.defenders.push(defender);
+
+      // let arr = targetPlayer.cardsInPlay;
+      // for (let i=0; i< arr.length; i++) {
+      // console.log(arr[i].serialNumber)
+      // if (arr[i].serialNumber == card.serialNumber || arr[i].serialNumber == card){
+      //   const defender = arr[i];
+
+        this.defenders.push(vortex.findCreature(card));
+        // game.defenders.push(defender);
         game.attackers[0].isBlocked=true;
         // targetPlayer.d1.push(defender);
         console.log(game.defenders);
         console.log(defender.name + " defending!");
         // let t = targetPlayer.cardsInPlay.indexOf(defender);
         // targetPlayer.cardsInPlay.splice(t, 1);
-      } else {
-        console.log('can not defend');
-      }
-    }
+      // } else {
+        // console.log('can not defend');
+      // }
+    // }
   },
 
     attackPhase(attacker,defender) {
