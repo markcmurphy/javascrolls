@@ -3,30 +3,68 @@ $(() => {
   // classes
 
   class Creature {
-    constructor(name, cost, attackPoints, defensePoints, arrPlace) {
+    constructor(name, cost, attackPoints, defensePoints, serialNumber){
       this.name = name;
+    // constructor(name, cost, attackPoints, defensePoints) {
+      // this.name = name;
       this.cost = cost;
       this.attackPoints = attackPoints;
       this.defensePoints = defensePoints;
-      this.arrPlace = arrPlace;
-      this.creatureID = 0;
+      this.serialNumber = serialNumber;
+      // this.arrPlace = arrPlace;
+      // this.creatureID = creatureID;
       this.isInPlay = false;
       this.isDead = false;
       this.canAttack = true;
       this.canDefend = true;
-      this.roundsInPlay = 0;
-      this.id = 0;
+      // this.roundsInPlay = 0;
     }
 
-createCard (targetPlayer) {
-    if (targetPlayer === player1) {
-       $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(this.name + ' cost: ' + this.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr('id', this.creatureID++);
-       }
-  else if (targetPlayer === player2) {
-  $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(this.name + ' cost: ' + this.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', this.creatureID++);
 }
-  }
+const factory = {
+      creatures: [],
+      createArcher() {
+        const newArcher = new Creature('Archer',2,2,2, this.creatures.length);
+        this.creatures.push(newArcher);
+        return newArcher;
+},
+    createGhost() {
+    const newGhost = new Creature('Ghost', 1, 1, 1, this.creatures.length);
+    this.creatures.push(newGhost);
+    return newGhost;
+},
+findCreature(index){
+  return this.creatures[index];
 }
+}
+
+factory.createGhost();
+factory.createGhost();
+factory.createGhost();
+factory.createArcher();
+console.log(factory.creatures);
+
+// const ghost = {
+//       creatures: [],
+//
+// },
+// findCreature(index){
+//   return ghost.creatures[index];
+// }
+// }
+//
+// archer.create();
+// const archer = new Generator('Archer',2, 2, 2,);
+// archer.create();
+// ghost.create();
+// archer.create();
+// const ghost = new Generator('Ghost', 1, 1, 1,);
+// archer.createCreature();
+// ghost.createCreature();
+// archer.createCreature();
+// console.log(archer.creatures);
+// console.log(ghost.findCreature(0));
+
 
   class Player {
     constructor(name) {
@@ -42,8 +80,8 @@ createCard (targetPlayer) {
 
   const player1 = new Player("Mark");
   const player2 = new Player("Comp");
-  const ghost = new Creature("ghost", 1, 1, 1, 0);
-  const archer = new Creature("Archer", 1, 1, 2, 1);
+  // const ghost = new Creature("ghost", 1, 1, 1, 0, 0);
+  // const archer = new Creature("Archer", 1, 1, 2, 1, 0);
 
   // gameplay
 
@@ -51,39 +89,59 @@ createCard (targetPlayer) {
     roundNumber: 0,
     attackers: [],
     defenders: [],
-    availableCreatures: [ghost, archer],
+    availableCreatures: ["ghost", "archer"],
     currentPlayersTurn: {},
-    creaturesBuilt: 1,
+    creaturesBuilt: 0,
     allCreatures: [],
 
     // flipCoin() {
     //
     // }
 
-    // assignDeck() {
-    //
-    //
-    // }
+    assignDeck(targetPlayer) {
+        let a = Math.floor((Math.random() * game.availableCreatures.length));
+        let b = game.availableCreatures[a];
+      for (let i=0; i<30; i++) {
+        if (b == "ghost") {
+        ghost.create();
+        let y = ghost.findCreature(ghost.creatures.length);
+        targetPlayer.deck.push(y);
+      } else if (b == 'archer') {
+        archer.create();
+        let y = ghost.findCreature(ghost.creatures.length);
+        targetPlayer.deck.push(y);
+      }
+      }
 
-    // buildCard(targetPlayer, card) {
-    //   game.creaturesBuilt += 1;
-    //   console.log(this.creaturesBuilt);
-    //   // console.log(card);
-    //   if (targetPlayer === player1) {
-    //     game.allCreatures.push(card);
-    //     $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
-    //     // card.creatureID = this.creaturesBuilt;
-    //   } else if (targetPlayer === player2) {
-    //     game.allCreatures.push(card);
-    //     $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', this.creaturesBuilt);
-    //     // card.creatureID = this.creaturesBuilt;
-    //    }
-    //   console.log(game.allCreatures);
-    // },
+    },
 
-    dealCard(targetPlayer, creature) {
-      creature.createCard(targetPlayer);
-      targetPlayer.hand.push(creature);
+    buildCard(targetPlayer, card) {
+      game.creaturesBuilt += 1;
+      // console.log(this.creaturesBuilt);
+      if (targetPlayer === player1) {
+        // game.allCreatures.push(card);
+        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
+      } else if (targetPlayer === player2) {
+        game.allCreatures.push(card);
+        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', this.creaturesBuilt);
+       }
+    },
+
+    dealCard(targetPlayer, x) {
+      if (x == "ghost") {
+        ghost.create();
+        let y = ghost.findCreature(ghost.creatures.length);
+        targetPlayer.hand.push(y);
+        game.buildCard(targetPlayer, ghost);
+      } else if (x == 'archer') {
+        archer.create();
+        let y = ghost.findCreature(ghost.creatures.length );
+        targetPlayer.hand.push(y);
+        game.buildCard(targetPlayer, archer);
+      }
+
+      // console.log(x);
+      // targetPlayer.hand.push(y);
     //   this.buildCard(targetPlayer, card);
     //   // game.creaturesBuilt += 1;
     //   // console.log(this.creaturesBuilt);
@@ -99,7 +157,9 @@ createCard (targetPlayer) {
       for (let i = 0; i < 3; i++) {
         let a = Math.floor((Math.random() * game.availableCreatures.length));
         game.dealCard(targetPlayer, game.availableCreatures[a]);
+        // console.log(a);
       };
+
     },
 
     updateMana(targetPlayer) {
@@ -123,6 +183,7 @@ createCard (targetPlayer) {
       console.log('Game started!');
       this.currentPlayersTurn = targetPlayer;
       targetPlayer.mana += 1;
+      game.assignDeck(player1);
       game.dealFirstHand(player1);
       game.dealFirstHand(player2);
       game.updateHealth(player1);
@@ -153,21 +214,44 @@ createCard (targetPlayer) {
 
     },
 
-    playCard(targetPlayer, card) {
+    playCard(targetPlayer, num) {
+      console.log(num);
+      // console.log(targetPlayer.hand[0].id);
+      let arr = targetPlayer.hand;
+      console.log(arr[0].id);
+      // console.log(arr.find(arr.id === arr.num).name);
+// let $card = $('#'+num);
+// console.log($($card).name);
+// console.log(card);
+//       let lookup = {};
+//       for (let i = 0; i<targetPlayer.hand.length;i++) {
+//         lookup[targetPlayer.hand[i].id] = targetPlayer.hand[i];
+//       }
+//       console.log(lookup[num]);
         // if (card.cost <= targetPlayer.mana) {
-        console.log(card);
-        card.isInPlay = true;
-        // need to set method for isInPlay to display card
-        targetPlayer.mana -= card.cost;
-        targetPlayer.cardsInPlay.push(card);
-        console.log(targetPlayer.cardsInPlay);
-        console.log(card);
-        console.log(card.name + " played!");
-        console.log("remaining mana:  " + targetPlayer.mana);
-        let t = targetPlayer.hand.indexOf(card);
-        targetPlayer.hand.splice(t, 1);
-        console.log("You now have ", targetPlayer.hand, " remaining in your hand");
-        console.log(card.creatureID);
+        for (let i=0; i< arr.length; i++) {
+          console.log(arr[i].id);
+          if (arr[i].id == num) {
+            console.log(i);
+            console.log(arr[i]);
+            const card = arr[i];
+          } else {
+            console.log(-1);
+          }
+        };
+        // console.log(card);
+        // card.isInPlay = true;
+        // // need to set method for isInPlay to display card
+        // targetPlayer.mana -= card.cost;
+        // targetPlayer.cardsInPlay.push(card);
+        // console.log(targetPlayer.cardsInPlay);
+        // console.log(card);
+        // console.log(card.name + " played!");
+        // console.log("remaining mana:  " + targetPlayer.mana);
+        // let t = targetPlayer.hand.indexOf(card);
+        // targetPlayer.hand.splice(t, 1);
+        // console.log("You now have ", targetPlayer.hand, " remaining in your hand");
+        // console.log(card.creatureID);
       // } else {
         // need to change to message on DOM
         // console.log("not enough mana");
@@ -329,14 +413,14 @@ createCard (targetPlayer) {
     // if (game.card.cost <= game.targetPlayer.mana) {
       // let i = $('a:focus').attr('arrPlace');
       // console.log($(e.currentTarget).attr('arrPlace'));
-      let i = $(e.currentTarget).attr('arrPlace');
-      console.log(i);
-      let card = game.availableCreatures[i];
-      console.log(card);
+      // let i = $(e.currentTarget).attr('arrPlace');
+      // let card = game.availableCreatures[i];
+      // console.log(card);
       // let card = $(e.currentTarget).closest('card');
       // console.log(card1);
       // console.log(e.currentTarget);
-      // console.log($(e.currentTarget).closest('div'));
+      let card = $(e.currentTarget).attr('id');
+      console.log(card);
       game.playCard(player1, card);
       $(e.currentTarget).closest('div').appendTo(".playerArea1 .inPlay");
       game.updateMana(player1);
@@ -510,6 +594,7 @@ Creature.handleEvent = function(e) {
 
 // ghost.createCard(player1);
 // console.log(ghost.defensePoints);
-
+// game.assignDeck(player1);
+// console.log(player1.deck);
 
 });
