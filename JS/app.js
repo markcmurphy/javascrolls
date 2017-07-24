@@ -31,10 +31,25 @@ const vortex = {
     this.creatures.push(newArcher);
     return newArcher;
   },
-  createGhost() {
-    const newGhost = new Creature('Ghost', 1, 1, 1, this.creatures.length);
-    this.creatures.push(newGhost);
-    return newGhost;
+  createGoblin() {
+    const newGoblin = new Creature('Goblin', 1, 1, 1, this.creatures.length);
+    this.creatures.push(newGoblin);
+    return newGoblin;
+  },
+  createGolem() {
+    const newGolem = new Creature('Golem', 4,3,4, this.creatures.length);
+    this.creatures.push(newGolem);
+    return newGolem;
+  },
+  createSludge() {
+    const newSludge = new Creature('Sludge', 1, 0, 2, this.creatures.length);
+    this.creatures.push(newSludge);
+    return newSludge;
+  },
+  createEnt() {
+    const newEnt = new Creature('Ent', 5, 3, 5, this.creatures.length);
+    this.creatures.push(newEnt);
+    return newEnt;
   },
   findCreature(index) {
     return this.creatures[index];
@@ -44,7 +59,7 @@ const vortex = {
   class Player {
     constructor(name) {
       this.name = name;
-      this.healthPoints = 30;
+      this.healthPoints = 10;
       this.deck = [];
       this.hand = [];
       this.graveyard = [];
@@ -72,7 +87,7 @@ const vortex = {
     roundNumber: 1,
     attackers: [],
     defenders: [],
-    availableCreatures: ["ghost", "archer"],
+    availableCreatures: ["goblin", "archer", "golem", "sludge", "ent"],
     currentPlayersTurn: {},
     numberOfTurns: 0,
     // creaturesBuilt: 0,
@@ -89,10 +104,16 @@ const vortex = {
       for (let i = 0; i < 30; i++) {
         let a = Math.floor((Math.random() * game.availableCreatures.length));
         let b = game.availableCreatures[a];
-        if (b == "ghost") {
-          vortex.createGhost();
+        if (b == "goblin") {
+          vortex.createGoblin();
         } else if (b == 'archer') {
           vortex.createArcher();
+        } else if (b == 'golem') {
+          vortex.createGolem();
+        } else if (b == 'sludge') {
+          vortex.createSludge();
+        } else if (b == 'ent') {
+          vortex.createEnt();
         }
         targetPlayer.deck.push(vortex.creatures[i]);
       }
@@ -114,6 +135,22 @@ const vortex = {
         'background-image': "url('http://i.imgur.com/OGDnCY4.png')",
         'background-size': "cover",
       });
+      $('[name=Goblin]').css({
+        'background-image': "url('http://i.imgur.com/ehpvZFZ.png')",
+        'background-size': "cover",
+      });
+      $('[name=Golem]').css({
+        'background-image': "url('http://i.imgur.com/g1yAGLX.png')",
+        'background-size': "cover",
+      });
+      $('[name=Sludge]').css({
+        'background-image': "url('http://i.imgur.com/TKBuYRq.png')",
+        'background-size': "cover",
+      });
+      $('[name=Ent]').css({
+        'background-image': "url('http://i.imgur.com/q76h54z.png')",
+        'background-size': "cover",
+      });
     },
 
 
@@ -121,15 +158,45 @@ const vortex = {
     dealCard(targetPlayer, card) {
       targetPlayer.hand.push(card);
       if (targetPlayer == player1) {
-        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('player','player1').attr('id', card.serialNumber);
+        $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name).append('<button class="attack">A</button>', '<button  class="defend">B</button>').attr(card).attr('player','player1').attr('id', card.serialNumber);
+        game.backgrounds();
       } else if (targetPlayer == player2) {
-        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr('id', card.serialNumber).attr('player',"player2");
+        $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name).attr(card).append('<button class="attack">A</button>' ,'<button class="defend">B</button>').attr('id', card.serialNumber).attr('player',"player2");
        }
        game.backgrounds();
+       game.cardInfo();
     },
 
 
+    cardInfo() {
+      $("[name=Archer]").hover(function() {
+          $(this).css('cursor','pointer').attr('title', 'Mana Cost: 2 / Attack Points: 2 / Defense Points: 2');
+      }, function() {
+          $(this).css('cursor','auto');
+        })
+      $("[name=Goblin]").hover(function() {
+          $(this).css('cursor','pointer').attr('title', 'Mana Cost: 1 / Attack Points: 1 / Defense Points: 1');
+      }, function() {
+          $(this).css('cursor','auto');
+        })
+      $("[name=Golem]").hover(function() {
+          $(this).css('cursor','pointer').attr('title', 'Mana Cost: 4 / Attack Points: 3 / Defense Points: 4');
+      }, function() {
+          $(this).css('cursor','auto');
+        })
+      $("[name=Sludge]").hover(function() {
+          $(this).css('cursor','pointer').attr('title', 'Mana Cost: 1 / Attack Points: 0 / Defense Points: 2');
+      }, function() {
+          $(this).css('cursor','auto');
+        })
+      $("[name=Ent]").hover(function() {
+          $(this).css('cursor','pointer').attr('title', 'Mana Cost: 5 / Attack Points: 3 / Defense Points: 5');
+      }, function() {
+          $(this).css('cursor','auto');
+        })
 
+            // from https://stackoverflow.com/questions/1333546/how-can-i-display-a-tooltip-message-on-hover-using-jquery
+    },
 
     dealFirstHand(targetPlayer) {
       for (let i = 0; i < 3; i++) {
@@ -279,15 +346,15 @@ const vortex = {
       console.log(player2.cardsInPlay.length);
       let a = Math.floor((Math.random() * (player2.cardsInPlay.length)));
       let defender = player2.cardsInPlay[a];
-      // console.log(attacker);
-      // if (attacker.canAttack == true) {
-        console.log("computer defending with " + defender.name);
+      console.log(defender);
+      // console.log("computer defending with " + defender.name);
         this.defenders.push(defender);
         // player2.a1.push(attacker);
         let $computerSelectedCard = "#" + defender.serialNumber;
-        $('.battleField #d1').append($($computerSelectedCard));
+        $('.battleField .defenders #d1').append($($computerSelectedCard));
 
-    },
+      },
+
 
     // if (attackStatus == 'true') {
     //   $(e.currentTarget).closest('.card').appendTo(".battleField");
@@ -300,8 +367,10 @@ const vortex = {
     setAttack(target) {
       this.attackers.push(vortex.findCreature(target));
       let $selectedCard = "#" + target;
-        $('.battleField #a1').append($($selectedCard));
-      game.setDefendComp();
+        $('.battleField .attackers #a1').append($($selectedCard));
+        if (player2.cardsInPlay.length > 0) {
+        game.setDefendComp();
+      };
     },
 
     setDefenders(targetPlayer,card) {
@@ -359,6 +428,7 @@ const vortex = {
           this.attackers = [];
           this.defenders = [];
           $('.slot').empty();
+          game.isWon();
 
 
           // let a = this.defenders[i].defensePoints - this.attackers[i].attackPoints;
@@ -439,7 +509,13 @@ const vortex = {
 //   },
 
     isWon() {
-
+      if (player1.healthPoints <= 0) {
+        alert('You lost!');
+      } else if (player2.healthPoints <= 0) {
+        alert('Victory!');
+      } else {
+        null;
+      }
     },
 
     // resetGame() {
@@ -543,6 +619,7 @@ const vortex = {
   $('.reset').on('click', () => {
     console.log("reset");
     game.startGame();
+
   });
 
 

@@ -8,11 +8,7 @@ body {
   flex-direction: column;
   height: 900px;
   width: auto;
-  background-color: #FFAB46;
-  border: 3px solid rgb(255, 142, 7);
-  /*margin-left: 45px;*/
-  /*margin-right: 45px;*/
-  /*margin-top: 25px*/
+  background-color: #801515;
 }
 
 .playerArea1 {
@@ -23,11 +19,9 @@ body {
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 5px;
-  background-color: lavender;
-  border: 3px solid lavender;
+  background-color: #AA3939;
+  border: 1px solid #550000;
 }
-
-.attackButton {}
 
 .playerArea2 {
   display: flex;
@@ -37,49 +31,35 @@ body {
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 5px;
-  background-color: lavender;
-  border: 3px solid lavender;
+  background-color: #AA3939;
+  border: 1px solid #550000;
 }
 
 .card {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 75px;
+  height: 95px;
   width: 95px;
-  border: 1px solid #108BCD;
-  background: #4EBDF8;
+  border: 1px solid 139A43;
+  /*background: 139A43;*/
   margin: auto;
   /*display: inline-block;*/
   font-size: 10px;
   text-align: center;
   vertical-align: middle;
+  position: relative;
+  text: white;
   /*overflow: hidden;*/
 }
 
-.playerArea2 .card {
-  background: lightgreen;
-}
 
 .slot {
   width:25%;
-  border: 1px solid purple;
+  /*border: 1px solid black;*/
   display: flex;
 }
 
-.graveyard {
-background: #FFD29C;
-border: 3px solid black;
-flex-direction: row;
-flex-shrink: 30%;
-
-}
-
-Archer {
-  background-image: url('http://i.imgur.com/OGDnCY4.png');
-}
-
-.nameButton {}
 
 .attackers {
   display:flex;
@@ -87,9 +67,10 @@ Archer {
   flex-direction: row;
   margin: 4px;
   padding: 4px;
-  height:90px;
-  width: 47%;
-  border: 3px solid black;
+  height:110px;
+  width: 49%;
+  background: #D46A6A;
+  border: 3px solid #801515;
   text-align: center;
 }
 
@@ -97,25 +78,26 @@ Archer {
     display:flex;
     flex-wrap: wrap;
     flex-direction: row;
-    height:90px;
-    width: 47%;
+    height:110px;
+    width: 50%;
     margin: 4px;
     padding: 4px;
-    border: 3px solid black;
+    background: #D46A6A;
+    border: 3px solid #801515;
     text-align: center;
-
 }
 
 .battleField {
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
-  background: #FFD29C;
-  height: 100px;
+  background: 801515;
+  height: 125px;
   width: auto;
   margin: 4px;
+  /*padding-right: 10px;*/
   padding: 4px;
-  border: 1px solid rgb(255, 142, 7);
+  /*border: 1px solid #139A43;*/
   text-align: center;
 }
 
@@ -125,12 +107,29 @@ Archer {
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
-  background: #FFD29C;
+  background: #FFAAAA;
   height: 100px;
   width: auto;
   margin: 10px;
   padding: 5px;
-  border: 3px solid rgb(255, 142, 7);
+  /*border: 3px solid #0B5D1E;*/
+  text-align: center;
+}
+
+ .defend {
+  width: 2em;
+  height: 2em;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+}
+ .attack {
+  width: 2em;
+  height: 2em;
+  position: absolute;
+  left: 0;
+  bottom: 0;
   text-align: center;
 }
 
@@ -138,13 +137,25 @@ Archer {
   flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
-  background: #FFD29C;
+  background: #FFAAAA;
   height: 100px;
   width: auto;
   margin: 10px;
   padding: 5px;
-  border: 3px solid rgb(255, 142, 7);
+  /*border: 3px solid #0B5D1E;*/
   text-align: center;
 }
 
-.deck {}
+.waves-effect:hover {
+  background-color: #D46A6A;
+}
+
+.playerArea2 .hand .card  {
+  background-image: url(http://i.imgur.com/kiwNBA6.jpg) !important;
+  background-size: 100%;
+  font-size: 0;
+}
+
+.playerArea2 .hand .button {
+  visibility: hidden;
+}
