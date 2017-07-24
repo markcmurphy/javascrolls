@@ -348,7 +348,7 @@ const vortex = {
     attackPhase(attacker,defender) {
       console.log(attacker, " is attacker");
       console.log(defender, " is defender");
-      alert("It is " + game.currentPlayersTurn + "/'s turn");
+      // alert("It is " + game.currentPlayersTurn + "/'s turn");
         let attPts = 0;
         let defPts = 0;
         for (let i=0; i<this.attackers.length; i++) {
@@ -365,7 +365,7 @@ const vortex = {
 
         let life = () => {
           let a = defender.healthPoints -= (attPts - defPts);
-          alert('Defender takes ' + (a) + ' damage');
+          alert('Defender takes ' + (attPts - defPts) + ' damage');
         };
           life();
 
@@ -514,7 +514,7 @@ const vortex = {
   );
 
   $('.player1TurnOver').on('click', () => {
-    console.log("player 1 turn over");
+    alert("Computer's turn!");
     game.turnBegin(player2);
     game.compTurn();
   });
@@ -531,6 +531,7 @@ const vortex = {
   );
 
   $('.player2TurnOver').on('click',() => {
+    alert("Your turn!")
     game.turnBegin(player1);
   });
 
