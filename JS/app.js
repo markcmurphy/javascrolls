@@ -59,7 +59,7 @@ const vortex = {
   class Player {
     constructor(name) {
       this.name = name;
-      this.healthPoints = 10;
+      this.healthPoints = 5;
       this.deck = [];
       this.hand = [];
       this.graveyard = [];
@@ -286,7 +286,7 @@ const vortex = {
         let card = canPlay[a];
         console.log(card);
         game.playCard(player2, card);
-        alert("Computer played a ", card.name);
+        // alert("Computer played a " + card.name);
         let $computerSelectedCard = "#" + card.serialNumber;
         $('.playerArea2 .inPlay').append($($computerSelectedCard));
         if (player2.mana >= 1) {
