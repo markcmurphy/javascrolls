@@ -1,14 +1,17 @@
 body {
   background: white;
   font-family: roboto;
+  padding-bottom: -10px;
 }
 
 .board {
   display: flex;
   flex-direction: column;
-  height: 900px;
+  height: auto;
   width: auto;
   background-color: #801515;
+  padding-bottom: 30px;
+  padding-top: 20px;
 }
 
 .playerArea1 {
@@ -18,9 +21,11 @@ body {
   min-width: 450px;
   margin-top: 5px;
   margin-bottom: 5px;
+  padding-bottom: 5px;
   padding: 5px;
   background-color: #AA3939;
   border: 1px solid #550000;
+  color: white;
 }
 
 .playerArea2 {
@@ -30,9 +35,11 @@ body {
   min-width: 450px;
   margin-top: 5px;
   margin-bottom: 5px;
+  padding-bottom: 5px;
   padding: 5px;
   background-color: #AA3939;
   border: 1px solid #550000;
+  color: white;
 }
 
 .card {
@@ -49,8 +56,12 @@ body {
   text-align: center;
   vertical-align: middle;
   position: relative;
-  text: white;
+  color: white;
   /*overflow: hidden;*/
+}
+
+.card button {
+  color: black;
 }
 
 
@@ -63,7 +74,7 @@ body {
 
 .attackers {
   display:flex;
-  flex-wrap: wrap;
+  flex-wrap:nowrap;
   flex-direction: row;
   margin: 4px;
   padding: 4px;
@@ -72,11 +83,12 @@ body {
   background: #D46A6A;
   border: 3px solid #801515;
   text-align: center;
+  color: black;
 }
 
 .defenders {
     display:flex;
-    flex-wrap: wrap;
+    flex-wrap:nowrap;
     flex-direction: row;
     height:110px;
     width: 50%;
@@ -85,12 +97,13 @@ body {
     background: #D46A6A;
     border: 3px solid #801515;
     text-align: center;
+    color: black;
 }
 
 .battleField {
   display: flex;
   flex-grow: 1;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   background: 801515;
   height: 125px;
   width: auto;
@@ -114,6 +127,7 @@ body {
   padding: 5px;
   /*border: 3px solid #0B5D1E;*/
   text-align: center;
+  color: black;
 }
 
  .defend {
@@ -144,16 +158,33 @@ body {
   padding: 5px;
   /*border: 3px solid #0B5D1E;*/
   text-align: center;
+  color: black;
 }
 
 .waves-effect:hover {
   background-color: #D46A6A;
+}
+.waves-effect {
+display: inline-block;
 }
 
 .playerArea2 .hand .card  {
   background-image: url(http://i.imgur.com/kiwNBA6.jpg) !important;
   background-size: 100%;
   font-size: 0;
+}
+
+header {
+  height:auto;
+  font-family: Niconne;
+}
+
+h4 {
+  text-indent: 30px;
+}
+
+.footer {
+  height: auto;
 }
 
 .playerArea2 .hand .button {

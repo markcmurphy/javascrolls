@@ -119,17 +119,6 @@ const vortex = {
       }
     },
 
-    // buildCard(targetPlayer, card) {
-    //   game.creaturesBuilt += 1;
-    //   // console.log(this.creaturesBuilt);
-    //   if (targetPlayer === player1) {
-    //     // game.allCreatures.push(card);
-    //     $('<div>').addClass('card').appendTo('.playerArea1 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button  class="defend">B</button>').attr(card).attr('id', game.creaturesBuilt);
-    //   } else if (targetPlayer === player2) {
-    //     game.allCreatures.push(card);
-    //     $('<div>').addClass('card').appendTo('.playerArea2 .hand').text(card.name + ' cost: ' + card.cost).append('</br><button class="attack">A</button>', '</br><button class="defend">B</button>').attr(card).attr('id', this.creaturesBuilt);
-    //    }
-    // },
     backgrounds() {
       $('[name=Archer]').css({
         'background-image': "url('http://i.imgur.com/OGDnCY4.png')",
@@ -152,6 +141,8 @@ const vortex = {
         'background-size': "cover",
       });
     },
+
+    // images from http://freeforall.cc/works/questquest-game-icons/?page_number_0=1
 
 
 
@@ -195,7 +186,8 @@ const vortex = {
           $(this).css('cursor','auto');
         })
 
-            // from https://stackoverflow.com/questions/1333546/how-can-i-display-a-tooltip-message-on-hover-using-jquery
+// from https://stackoverflow.com/questions/1333546/how-can-i-display-a-tooltip-message-on-hover-using-jquery
+
     },
 
     dealFirstHand(targetPlayer) {
@@ -224,7 +216,7 @@ const vortex = {
 
 
     startGame(targetPlayer) {
-      console.log('Game started!');
+      alert('Game started!');
       this.currentPlayersTurn = targetPlayer;
       this.roundNumber+=1;
       targetPlayer.mana += 1;
@@ -236,8 +228,6 @@ const vortex = {
       game.updateHealth(player2);
       game.updateMana(player1);
       game.updateMana(player2);
-      console.log(player1.hand);
-      console.log(player2.hand);
     },
 
     turnBegin(targetPlayer) {
@@ -261,30 +251,14 @@ const vortex = {
       game.updateMana(targetPlayer);
       game.updateHealth(targetPlayer);
     },
-      // need to configure to ensure a max of 10 using if statements
-
 
     playCard(targetPlayer, card) {
-      console.log(card);
-        // let card = vortex.findCreature(num);
-        // console.log(card);
-        // let arr = targetPlayer.hand;
-        // for (let i=0; i< arr.length; i++) {
-          // if (arr[i].serialNumber == num.serialNumber || arr[i].serialNumber == num){
-
-            // const card = arr[i];
             card.isInPlay = true;
             targetPlayer.cardsInPlay.push(card);
             targetPlayer.mana -= card.cost;
-            console.log(card.name + " played!");
-            console.log("remaining mana:  " + targetPlayer.mana);
+            alert(card.name + ' played! Remaining mana: ' + targetPlayer.mana);
             let t = targetPlayer.hand.indexOf(card);
             targetPlayer.hand.splice(t, 1);
-            console.log("You now have ", targetPlayer.hand, " remaining in your hand");
-          // } else {
-            // console.log('not played');
-          // }
-        // };
         game.updateMana(targetPlayer);
         game.updateHealth(targetPlayer);
     },
@@ -312,7 +286,7 @@ const vortex = {
         let card = canPlay[a];
         console.log(card);
         game.playCard(player2, card);
-        console.log("computer played a ", card.name);
+        alert("Computer played a ", card.name);
         let $computerSelectedCard = "#" + card.serialNumber;
         $('.playerArea2 .inPlay').append($($computerSelectedCard));
         if (player2.mana >= 1) {
@@ -332,9 +306,8 @@ const vortex = {
       let attacker = player2.cardsInPlay[a];
       console.log(attacker);
       if (attacker.canAttack == true) {
-        console.log("computer attacking with " + attacker.name);
+        alert("Computer attacking with " + attacker.name);
         this.attackers.push(attacker);
-        // player2.a1.push(attacker);
         let $computerSelectedCard = "#" + attacker.serialNumber;
         $('.battleField #a1').append($($computerSelectedCard));
       } else {
@@ -355,15 +328,6 @@ const vortex = {
 
       },
 
-
-    // if (attackStatus == 'true') {
-    //   $(e.currentTarget).closest('.card').appendTo(".battleField");
-    //   game.setAttack(card);
-    // } else if (attackStatus == 'false'){
-    //   alert('can not attack');
-    // };
-
-
     setAttack(target) {
       this.attackers.push(vortex.findCreature(target));
       let $selectedCard = "#" + target;
@@ -375,35 +339,19 @@ const vortex = {
 
     setDefenders(targetPlayer,card) {
 
-      // let arr = targetPlayer.cardsInPlay;
-      // for (let i=0; i< arr.length; i++) {
-      // console.log(arr[i].serialNumber)
-      // if (arr[i].serialNumber == card.serialNumber || arr[i].serialNumber == card){
-      //   const defender = arr[i];
-
         this.defenders.push(vortex.findCreature(card));
-        // game.defenders.push(defender);
         game.attackers[0].isBlocked=true;
-        // targetPlayer.d1.push(defender);
-        console.log(game.defenders);
-        console.log(defender.name + " defending!");
-        // let t = targetPlayer.cardsInPlay.indexOf(defender);
-        // targetPlayer.cardsInPlay.splice(t, 1);
-      // } else {
-        // console.log('can not defend');
-      // }
-    // }
+        alert(defender.name + " is defending!");
+
   },
 
     attackPhase(attacker,defender) {
       console.log(attacker, " is attacker");
       console.log(defender, " is defender");
-      console.log("it is " ,game.currentPlayersTurn, "turn");
-      // if (this.attackers.length > this.defenders.length) {
+      alert("It is " ,game.currentPlayersTurn, "/'s turn");
         let attPts = 0;
         let defPts = 0;
         for (let i=0; i<this.attackers.length; i++) {
-          // this.attackers[i].isBlocked = true;
           console.log(this.attackers[i]);
           attPts += parseInt(this.attackers[i].attackPoints);
           console.log(attPts);
@@ -416,7 +364,8 @@ const vortex = {
         };
 
         let life = () => {
-          defender.healthPoints -= (attPts - defPts);
+          let a = defender.healthPoints -= (attPts - defPts);
+          alert('Defender takes ' + (a) + 'damage');
         };
           life();
 
@@ -429,20 +378,10 @@ const vortex = {
           this.defenders = [];
           $('.slot').empty();
           game.isWon();
-
-
-          // let a = this.defenders[i].defensePoints - this.attackers[i].attackPoints;
-          // let b = this.attackers[i].defensePoints - this.defenders[i].attackPoints;
-          // if (a <= 0) {
-            // this.defenders[i].isDead = true;
-          // };
-          // if (b <= 0) {
-            // this.attackers[i].isDead = true;
-          // };
-
-          // $('div.defenders').remove('.card');
-
       },
+
+
+
 //
 //       // for (let i=0; i<this.attackers.length;i++) {
 //       //   if (game.attackers[i].isBlocked == false) {
@@ -518,14 +457,9 @@ const vortex = {
       }
     },
 
-    // resetGame() {
-    //
-    // }
-
   }
 
   $('.start').on('click', () => {
-    // let a = game.flipCoin();
     game.startGame(player1);
   });
 
@@ -547,7 +481,6 @@ const vortex = {
   });
 
   $('.inPlay').on('click', '.attack', (e) => {
-    // when clicking A again, needs to return card to In Play
     let card = $(e.currentTarget).closest('div').attr('serialNumber');
     console.log(card);
     game.setAttack(card);
@@ -575,25 +508,19 @@ const vortex = {
     }
   );
 
+  $('.rules').on('click',() => {
+    alert('Play creatures and attack opponent by clicking A button. Mana is used to play creatures and refills each turn. Attackers can be blocked by clicking B. First player to 0 health loses!');
+    }
+  );
+
   $('.player1TurnOver').on('click', () => {
     console.log("player 1 turn over");
-  //   console.log(player1.cardsInPlay);
-  //   for (let i=0; i < player1.cardsInPlay.length; i++) {
-  //   player1.cardsInPlay[i].roundsInPlay+=1;
-  //   if (player1.cardsInPlay[i].roundsInPlay >= 1) {
-  //     player1.cardsInPlay[i].canAttack = 'true';
-  //   } else {
-  //     console.log('can not set to true');
-  //   }
-  // };
     game.turnBegin(player2);
     game.compTurn();
   });
 
   $('.battle').on('click', () => {
     console.log("battle clicked");
-    // console.log(game.attackers[0]);
-    // console.log(game.defenders[0]);
     console.log(game.currentPlayersTurn);
     if (game.currentPlayersTurn == player2) {
       game.attackPhase(game.currentPlayersTurn, player1);
@@ -604,16 +531,8 @@ const vortex = {
   );
 
   $('.player2TurnOver').on('click',() => {
-    // let targetPlayer = player2;
-    // for (let i=0; i<targetPlayer.cardsInPlay.length; i++) {
-    // targetPlayer.cardsInPlay[i].roundsInPlay+=1;
-    // if (targetPlayer.cardsInPlay[i].roundsInPlay >= 1) {
-    //   targetPlayer.cardsInPlay[i].canAttack = true;
-    // };
     game.turnBegin(player1);
   });
-
-// https://stackoverflow.com/questions/16113070/how-to-associate-an-object-with-a-dom-element
 
 // functionality doesn't work yet
   $('.reset').on('click', () => {
@@ -621,11 +540,4 @@ const vortex = {
     game.startGame();
 
   });
-
-
-  // test code
-
-
-
-
 });
